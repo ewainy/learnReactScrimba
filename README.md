@@ -131,7 +131,7 @@ const page () {
 }
 
 ReactDOM.render(
-    <page />, document.getElementById('root')
+    page, document.getElementById('root')
 )
 ```
 
