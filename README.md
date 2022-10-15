@@ -1,5 +1,5 @@
 # learningReact
-Re-learning React, following the course on Scrimba
+Re-learning React, following the course on Scrimba "Learn React for Free" by Bob Ziroll. This course teaches React 17.
 
 
 ## Static Pages in React
@@ -40,3 +40,50 @@ Re-learning React, following the course on Scrimba
 Bob Ziroll covers this in his course, but these resources are helpful to include:
 - [Introducing JSX - React Docs](https://reactjs.org/docs/introducing-jsx.html)
 - [React.js Basics – The DOM, Components, and Declarative Views Explained - freeCodeCamp](https://www.freecodecamp.org/news/reactjs-basics-dom-components-declarative-views/)
+
+### React 18
+React 18 brought some new changes, one being how it renders it's root element. ReactDOM.render is no longer supported in React 18. Use createRoot instead.
+
+- **React version <18**
+``` jsx
+import React from "react"
+import ReactDOM from "react-dom"
+
+const navbar = (
+    <nav>
+        <h1>Emma's Website</h1>
+        <ul>
+            <li>Menu</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+    </nav>
+)
+
+ReactDOM.render(navbar, document.getElementById("root"))
+```
+- **React version 18**
+```jsx
+import React from "react"
+import ReactDOM from "react-dom/client" // new change
+
+const navbar = (
+    <nav>
+        <h1>Emma's Website</h1>
+        <ul>
+            <li>Menu</li>
+            <li>About</li>
+            <li>Contact</li>
+        </ul>
+    </nav>
+)
+
+
+
+// ReactDOM.render(navbar, document.getElementById("root")) // Old way
+ReactDOM.createRoot(document.getElementById("root")).render(navbar) // New way 1 option, 1 line
+//
+const root = ReactDOM.createRoot(document.getElementById("root")) // New way - another option, seperate
+root.render(navbar)
+
+```
