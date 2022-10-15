@@ -20,7 +20,7 @@ Re-learning React, following the course on Scrimba
         <MainContent />
     </div>,
     document.getElementById("root"))
-``
+    ```
 - **It's declarative**
     - The opposite of declarative is imperative. When a program is declarative, we can simply tell it what should be done. "Just tell me what to do and I'll worry about how I get it done"
     - It's opposite, imperative is where we tell it *how* it should be done. "Describe to me every step on how to do something, and I will do it"
@@ -36,4 +36,7 @@ Re-learning React, following the course on Scrimba
     header.textContent = 'Hello Vanilla JavaScript'
     document.getElementById('root').appendChild(header)
     ```
- 
+ ### Understanding React & JSX
+Bob Ziroll covers this in his course, but these resources are helpful to include:
+- [Introducing JSX - React Docs](https://reactjs.org/docs/introducing-jsx.html)
+- [React.js Basics – The DOM, Components, and Declarative Views Explained - freeCodeCamp](https://www.freecodecamp.org/news/reactjs-basics-dom-components-declarative-views/)
