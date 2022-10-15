@@ -37,7 +37,9 @@ Re-learning React, following the course on Scrimba "Learn React for Free" by Bob
     document.getElementById('root').appendChild(header)
     ```
  ### Understanding React & JSX
-Bob Ziroll covers this in his course, but these resources are helpful to include:
+Bob Ziroll covers this in his course. JSX returns plain JavaScript objects, with ReactDOM render's job to take React Elements and interpret them in a way that turns them into real DOM elements that the browser can understand.
+
+but these resources are helpful to include:
 - [Introducing JSX - React Docs](https://reactjs.org/docs/introducing-jsx.html)
 - [React.js Basics – The DOM, Components, and Declarative Views Explained - freeCodeCamp](https://www.freecodecamp.org/news/reactjs-basics-dom-components-declarative-views/)
 
