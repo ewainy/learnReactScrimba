@@ -89,3 +89,76 @@ const root = ReactDOM.createRoot(document.getElementById("root")) // New way - a
 root.render(navbar)
 
 ```
+
+## Static Page in React - Part 1 - Markup
+<img width="600px" alt="Scrimba slide of website to create" src="https://user-images.githubusercontent.com/77060368/195993009-7d08aed2-067b-4efb-bd33-dc580308e7ff.png" height="400px">
+
+
+```jsx
+/*
+Challenge: Starting from scratch, build and render the 
+HTML for our section project. Check the Google slide for 
+what you're trying to build.
+
+We'll be adding styling to it later.
+
+Hints:
+* The React logo is a file in the project tree, so you can
+  access it by using `src="./react-logo.png" in your image
+  element
+* You can also set the `width` attribute of the image element
+  just like in HTML. In the slide, I have it set to 40px
+ */
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+const page () {
+    return (
+    <div>
+    <img src ="./react-logo.png" width="40px"></img>
+    <h1>Fun Facts about React</h1>
+    <ul>
+        <li>Was first released in 2013</li>
+        <li>Was originally created by Jordan Walke</li>
+        <li>Has well over 100K stars on GitHub</li>
+        <li>Is maintained by Facebook</li>
+        <li>Powers thousands of enterprise apps, including mobile apps</li>
+    </ul>
+    </div>
+  
+    )
+}
+
+ReactDOM.render(
+    <page />, document.getElementById('root')
+)
+```
+
+## Pop Quiz 
+
+1. Why do we need to `import React from "react"` in our files?
+React is what defines JSX
+
+2. If I were to console.log(page) in index.js, what would show up?
+A JavaScript object. React elements that describe what React should
+eventually add to the real DOM for us.
+
+3. What's wrong with this code:
+```
+const page = (
+    <h1>Hello</h1>
+    <p>This is my website!</p>
+)
+```
+We need our JSX to be nested under a single parent element
+
+4. What does it mean for something to be "declarative" instead of "imperative"?
+Declarative means I can tell the computer WHAT to do 
+and expect it to handle the details. Imperative means I need
+to tell it HOW to do each step.
+
+5. What does it mean for something to be "composable"?
+We have small pieces that we can put together to make something
+larger/greater than the individual pieces.
+
