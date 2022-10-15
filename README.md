@@ -162,3 +162,8 @@ to tell it HOW to do each step.
 We have small pieces that we can put together to make something
 larger/greater than the individual pieces.
 
+## Vite Setup for React
+Pronounced 'Veet' is French for fast/ quick and is next generation frontend tooling. This resource [Create React App with Vite](https://scrimba.com/articles/create-react-app-with-vite/) covers setting up with Vite and the difference between Vite and the standard CRA (create-react-app) 
+
+<img width="407" alt="Vite setup" src="https://user-images.githubusercontent.com/77060368/195995293-2e025792-437e-4f7d-8531-27af24ccdefd.png">
+
