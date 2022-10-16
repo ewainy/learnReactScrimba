@@ -273,7 +273,7 @@ body {
 }
 
 .main-div {
- // background-color: #282D35; // This doesnt take up the whole section, so will apply to body tag instead for now
+ /* background-color: #282D35; // This doesnt take up the whole section, so will apply to body tag instead for now */
  display: flex;
  flex-direction: column;
 }
@@ -293,12 +293,31 @@ letter-spacing: -0.05em;
     width: 400px;
 }
 
-li {
+.main-facts > li {
 font-weight: 400;
 font-size: 16px;
 line-height: 19px;
 padding-block: 10px; 
 }
   
-
 ```
+## Colour the bullets
+
+With the pseudo selector [::marker](https://developer.mozilla.org/en-US/docs/Web/CSS/::marker)
+Selects bullets on list items, making it much easier for us to style.
+
+``css
+.main-facts > li::marker {
+    font-size: 1.6rem;
+    color: #61DAFB;
+}
+``
+
+## Add the background image
+
+``css
+  background-image: url('images/react-icon-large.png');
+  background-repeat:no-repeat;
+  background-position: right;
+```
+
