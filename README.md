@@ -306,18 +306,271 @@ padding-block: 10px;
 With the pseudo selector [::marker](https://developer.mozilla.org/en-US/docs/Web/CSS/::marker)
 Selects bullets on list items, making it much easier for us to style.
 
-``css
+```css
 .main-facts > li::marker {
     font-size: 1.6rem;
     color: #61DAFB;
 }
-``
+```
 
 ## Add the background image
 
-``css
+```css
   background-image: url('images/react-icon-large.png');
   background-repeat:no-repeat;
   background-position: right 75%;
 ```
 
+## Solo Project
+Build a digital business card based off this Figma design https://www.figma.com/file/4ctPLUvIn5b5Ep6YPOZWWd/Digital-Business-Card?node-id=0%3A1
+Requirements: Build from scratch, seperate components for:
+- Info (photo, name, role, email etc)
+- About
+- Interests
+- Footer with social links
+> **Note**
+> I used the figma design as a basic reference, I changed the colour pallette completely as I like colours 💜
+
+## Solo Project Result
+<img width="350" alt="Digital Business Card" src="https://user-images.githubusercontent.com/77060368/196059851-b6267f0b-3d24-4baf-8814-bb4e323bd7f4.png">
+
+## Solo Project Code
+`App.js`
+```jsx
+import React from "react"
+import Info from "./components/Info"
+import About from "./components/About"
+import Interests from "./components/Interests"
+import Footer from "./components/Footer"
+
+export default function App() {
+    return (
+        <div className="container">
+          <Info/>
+          <About/>
+          <Interests/>
+          <Footer/>
+        </div>
+    )
+}
+```
+## Components
+`Info.js`
+```jsx
+import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+    import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
+  
+  
+export default function Info () {
+    return (
+        <div className = 'info'>
+            <img src='./Emma.jpeg' alt='Profile image of Emma with a colourful swirled background. Emma has long blonde wavy hair, a heart-shaped face with big dark brown eyes and wearing a big smile.' className='profile-image'/>
+            <h1 className= 'name'>Emma Wain</h1>
+            <h3 className= 'role'>Frontend Developer</h3>
+        <button className= 'email'><FontAwesomeIcon icon={faEnvelope}/><a href = "mailto: abc@example.com"> Email</a>
+        </button>
+        </div>
+        
+    )
+}
+```
+
+`About.js`
+```jsx
+import React from 'react'
+
+export default function About () {
+    return (
+        <div className ='about'>
+           
+            <h2 className= 'about-title'>About</h2>
+           
+           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget tellus metus. Phasellus porttitor justo quam, sed tempor dolor mattis quis. Nam dapibus, orci ac congue sodales, ligula sem vulputate ante, sed posuere ligula enim ac massa. Morbi tincidunt leo non condimentum venenatis. Vivamus facilisis, risus at placerat posuere, lectus elit pellentesque quam, id hendrerit lacus sem id leo. Aenean ultricies fermentum aliquam.
+           </p>
+       
+        </div>
+        
+    )
+}
+```
+`Interests.js`
+```jsx
+import React from 'react'
+
+export default function Interests () {
+    return (
+        <div className ='interests'>
+           
+            <h2 className= 'interest-title'>Interests</h2>
+           
+           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget tellus metus. Phasellus porttitor justo quam, sed tempor dolor mattis quis. 
+           </p>
+       
+        </div>
+        
+    )
+}
+```
+
+`Footer.js`
+```jsx
+import React from 'react'
+  import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+    import { faTwitterSquare, faLinkedin, faGithub} from '@fortawesome/free-brands-svg-icons'
+  
+export default function Footer () {
+    return (
+        <footer>
+           
+        <div>
+        <a href='https://twitter.com/ewainy'><FontAwesomeIcon icon={faTwitterSquare} className= 'icon'/></a>
+       
+        <a href='https://linkedin.com/ewainy'><FontAwesomeIcon icon={faLinkedin} className= 'icon'/></a>
+       
+        <a href='https://github.com/ewainy'><FontAwesomeIcon icon={faGithub} className= 'icon'/></a>
+    </div>
+        </footer>
+        
+    )
+}
+```
+
+## Styling
+```css
+* {
+    box-sizing: border-box;
+}
+
+body {
+   background-color: #d6b5f5;
+}
+.container {
+margin: 10% 15%;
+    background-color:#a75fe9;
+}
+
+
+.info {
+      
+     display:flex;
+    align-items: center;
+    flex-direction: column; 
+    background-color:#a75fe9;
+    
+}
+
+.profile-image {
+   height: 50%;
+   width:50%;
+   border-radius: 50%;
+
+   margin: 30px; 
+
+}
+
+.name {
+     color: white;
+}
+
+.name, .role {
+  margin:0; 
+}
+
+.role {
+    color: #cdffee;  
+    font-weight:400;
+}
+
+.email {
+padding: 9px 13px 9px 11px;
+margin: 9px;
+width: 250px;
+height: 34px;
+
+
+
+
+/* white */
+
+background: #FFFFFF;
+/* gray/300 */
+
+border: 1px solid #D1D5DB;
+/* shadow/sm */
+
+box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+border-radius: 6px;
+}
+
+.email a {
+    text-decoration:none;
+    color:black;
+}
+
+.email a:hover {
+   text-decoration:underline;
+   text-decoration-thickness: 2px;
+   font-weight:700;
+   color:#943de4;
+}
+
+.about, .interests {
+color: white;   
+margin: 0% 10%;
+    
+}
+
+h2 {
+    margin-bottom:0px;
+    font-size: 16px;
+line-height: 150%;
+}
+
+p {
+    margin-top:5px;
+    font-size: 10.6px;
+line-height: 150%;
+padding-bottom: 7px;
+
+}
+
+.interests p {
+    padding-bottom: 40px;
+}
+
+
+footer {
+    background-color:#943de4;
+     display:flex;
+    justify-content:center;
+ 
+}
+
+footer div {
+    height: 50px;
+    width: 250px;
+    display:flex;
+    justify-content:space-around;
+    align-items: center;
+   
+}
+
+.icon {
+    height: 25px;
+    width:25px;
+    color:#cdffee;
+
+}
+
+.icon:hover{
+    color:white;
+    border:2px white solid;
+    padding:1px;
+}
+```
+
+## To Do 
+These are the improvements I would like to make yet:
+- Make responsive
+- Do accessibility check
