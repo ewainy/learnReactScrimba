@@ -417,7 +417,7 @@ export default function Interests () {
 ```jsx
 import React from 'react'
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-    import { faTwitterSquare, faLinkedin, faGithub} from '@fortawesome/free-brands-svg-icons'
+    import { faTwitterSquare, faLinkedin, faGithubSquare} from '@fortawesome/free-brands-svg-icons'
   
 export default function Footer () {
     return (
@@ -428,7 +428,7 @@ export default function Footer () {
        
         <a href='https://linkedin.com/ewainy'><FontAwesomeIcon icon={faLinkedin} className= 'icon'/></a>
        
-        <a href='https://github.com/ewainy'><FontAwesomeIcon icon={faGithub} className= 'icon'/></a>
+        <a href='https://github.com/ewainy'><FontAwesomeIcon icon={faGithubSquare} className= 'icon'/></a>
     </div>
         </footer>
         
@@ -572,5 +572,6 @@ footer div {
 
 ## To Do 
 These are the improvements I would like to make yet:
-- Make responsive
-- Do accessibility check
+-[x] Change GitHub Icon to a square version
+-[ ] Make responsive
+-[ ] Do accessibility check
