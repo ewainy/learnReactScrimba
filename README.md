@@ -167,3 +167,67 @@ Pronounced 'Veet' is French for fast/ quick and is next generation frontend tool
 
 <img width="407" alt="Vite setup" src="https://user-images.githubusercontent.com/77060368/195995293-2e025792-437e-4f7d-8531-27af24ccdefd.png">
 
+## Project Overview
+<img width="481" alt="Figma design for React page" src="https://user-images.githubusercontent.com/77060368/196040147-8f389fc5-d7e5-4e5a-91d5-808eed921242.png">
+
+Create a static React page based on this Figma design:https://www.figma.com/file/xA1rJVQOorqMW6xjGdBLcI/ReactFacts
+
+## Project - Navbar & Styling
+### React Navbar Component `components/Navbar.js`
+```jsx
+import React from "react"
+
+export default function Navbar() {
+    return ( 
+    <header>
+        <nav className = 'main-nav'>
+            <img className = 'logo' alt= 'React logo' src='images/
+                react-icon-small.png'/>
+             <h3 className = 'logo-text'>ReactFacts</h3>
+             <h4 className = 'nav-title'>React Course - Project 1</h4>
+        </nav>
+    </header>
+    )
+}
+```
+### React Navbar Styles `style.css`
+```css
+* {
+    box-sizing: border-box;
+}
+
+body {
+margin: 0;
+font-family: 'Inter';
+}
+
+.main-nav {
+display: flex;
+align-items: center;
+width: 550px;
+height: 91px;
+background: #21222A;
+}
+
+.logo {
+width: 28.93px;
+height: 28.93px;
+margin-left: 30px;
+margin-right: 5px;
+}
+
+.logo-text {
+margin-right: auto;
+font-weight: 700;
+font-size: 22px;
+color: #61DAFB;
+}
+
+.nav-title {
+font-weight: 600;
+font-size: 16px;
+text-align: right;
+margin-right: 30px;
+color: #DEEBF8;
+}
+```
