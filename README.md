@@ -318,6 +318,6 @@ Selects bullets on list items, making it much easier for us to style.
 ``css
   background-image: url('images/react-icon-large.png');
   background-repeat:no-repeat;
-  background-position: right;
+  background-position: right 75%;
 ```
 
