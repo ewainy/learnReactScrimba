@@ -231,3 +231,74 @@ margin-right: 30px;
 color: #DEEBF8;
 }
 ```
+## Project - Main & Styling
+### React Main Component `components/Main.js`
+```jsx
+/**
+Challenge: Build the main section!
+
+Skip 2 aspects of the design for now:
+1. The colored bullets in the list
+2. The larger React logo on the side
+
+Those will be separate challenges coming up.
+*/
+
+import React from "react"
+
+export default function Main() {
+    return (
+      return (
+        <div className = 'main-div'>
+            <h1 className = 'main-title'>Fun Facts about React</h1>
+            <ul className = 'main-facts'>
+                <li>Was first released in 2013</li>
+                <li>Was originally created by Jordan Walke</li>
+                <li>Has well over 100K stars on GitHub</li>
+                <li>Is maintained by Facebook</li>
+                <li>Powers thousands of enterprise apps, including mobile apps</li>
+            </ul>
+        </div>
+    )
+}
+}
+```
+### React Main Styling
+
+```css
+body {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    background-color: #282D35;
+}
+
+.main-div {
+ // background-color: #282D35; // This doesnt take up the whole section, so will apply to body tag instead for now
+ display: flex;
+ flex-direction: column;
+}
+
+.main-title {
+margin-left: 30px;
+margin-top: 50px;
+font-weight: 700;
+font-size: 39px;
+color:#FFFFFF;
+letter-spacing: -0.05em;
+}
+
+.main-facts {
+    margin-left: 30px;
+    color: #FFFFFF;
+    width: 400px;
+}
+
+li {
+font-weight: 400;
+font-size: 16px;
+line-height: 19px;
+padding-block: 10px; 
+}
+  
+
+```
