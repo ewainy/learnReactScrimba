@@ -178,4 +178,4 @@ p span {
     font-weight: 700;
 }
 ```
-<img width="163" alt="Card Component" src="https://user-images.githubusercontent.com/77060368/196287754-f0e073b9-4c80-4b93-9949-2d7a639d813f.png">
+<img width="160" alt="Card Component" src="https://user-images.githubusercontent.com/77060368/196288091-f88dd873-a1fa-4005-9a3f-a209bf49c400.png">
