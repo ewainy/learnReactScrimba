@@ -179,3 +179,23 @@ p span {
 }
 ```
 <img width="160" alt="Card Component" src="https://user-images.githubusercontent.com/77060368/196288091-f88dd873-a1fa-4005-9a3f-a209bf49c400.png">
+
+## Props Part 1 - Understanding The Concept
+As you would have noticed, we have hardcoded the card component details, which means that it's not reusable. We can change that by using `props`.
+
+### Primer for understanding props
+** What's wrong with this function? **
+```js
+function addTwoNumbersTogether() {
+    return 1 + 2
+}
+```
+It's limited in it's capabilities, if we call this function, it will always return 3. It's not reusable.
+<br>
+If we add some parameters to the function, we can dynamically add and return the sum of 2 numbers that we pass in when calling the function.
+
+```js
+function addTwoNumbersTogether(a,b) {
+    return a + b
+}
+```
