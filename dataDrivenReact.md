@@ -183,7 +183,7 @@ p span {
 ## Props Part 1 - Understanding The Concept
 As you would have noticed, we have hardcoded the card component details, which means that it's not reusable. We can change that by using `props`.
 
-### Primer for understanding props
+### Primer For Understanding Props
 ** What's wrong with this function? **
 ```js
 function addTwoNumbersTogether() {
@@ -197,5 +197,197 @@ If we add some parameters to the function, we can dynamically add and return the
 ```js
 function addTwoNumbersTogether(a,b) {
     return a + b
+}
+```
+We can see that, passing additional information to our elements or functions allows us to reuse them in multiple different ways.
+
+## Props - Create a Contact Component
+<img width="504" alt="Cat contact cards" src="https://user-images.githubusercontent.com/77060368/197335421-1fe8ecc9-3f88-4ccc-a682-f93241ddb43b.png">
+
+`App.js`
+
+```jsx
+import React from "react"
+
+
+
+
+function App() {
+    return (
+        <div className="contacts">
+        
+            <div className="contact-card">
+                <img src="./images/mr-whiskerson.png"/>
+                <h3>Mr. Whiskerson</h3>
+                <div className="info-group">
+                    <img src="./images/phone-icon.png" />
+                    <p>(212) 555-1234</p>
+                </div>
+                <div className="info-group">
+                    <img src="./images/mail-icon.png" />
+                    <p>mr.whiskaz@catnap.meow</p>
+                </div>
+            </div>
+            
+            <div className="contact-card">
+                <img src="./images/fluffykins.png"/>
+                <h3>Fluffykins</h3>
+                <div className="info-group">
+                    <img src="./images/phone-icon.png" />
+                    <p>(212) 555-2345</p>
+                </div>
+                <div className="info-group">
+                    <img src="./images/mail-icon.png" />
+                    <p>fluff@me.com</p>
+                </div>
+            </div>
+            
+            <div className="contact-card">
+                <img src="./images/felix.png"/>
+                <h3>Felix</h3>
+                <div className="info-group">
+                    <img src="./images/phone-icon.png" />
+                    <p>(212) 555-4567</p>
+                </div>
+                <div className="info-group">
+                    <img src="./images/mail-icon.png" />
+                    <p>thecat@hotmail.com</p>
+                </div>
+            </div>
+            
+            <div className="contact-card">
+                <img src="./images/pumpkin.png"/>
+                <h3>Pumpkin</h3>
+                <div className="info-group">
+                    <img src="./images/phone-icon.png" />
+                    <p>(0800) CAT KING</p>
+                </div>
+                <div className="info-group">
+                    <img src="./images/mail-icon.png" />
+                    <p>pumpkin@scrimba.com</p>
+                </div>
+            </div>
+            
+        </div>
+    )
+}
+
+export default App
+```
+### Challenge -
+- Create a Contact.js component in another file
+- Move one of the contact card divs below into that file
+- import and render 4 instances of that contact card
+    - Think ahead: What's the problem with doing it this way?
+
+`Contact.js`
+```jsx
+import React from "react"
+
+export default function Contact() {
+    return (
+        <div className="contact-card">
+            <img src="./images/mr-whiskerson.png"/>
+            <h3>Mr. Whiskerson</h3>
+            <div className="info-group">
+                <img src="./images/phone-icon.png" />
+                <p>(212) 555-1234</p>
+            </div>
+            <div className="info-group">
+                <img src="./images/mail-icon.png" />
+                <p>mr.whiskaz@catnap.meow</p>
+            </div>
+        </div>
+    )
+}
+```
+
+`App.js`
+```jsx
+import React from "react"
+import Contact from "./Contact"
+
+
+function App() {
+    return (
+        <div className="contacts">
+            <Contact 
+                img="./images/mr-whiskerson.png"
+                name="Mr. Whiskerson"
+                phone="(212) 555-1234"
+                email="mr.whiskaz@catnap.meow"
+            />
+            <Contact 
+                img="./images/fluffykins.png"
+                name="Fluffykins"
+                phone="(212) 555-2345"
+                email="fluff@me.com"
+            />
+            <Contact 
+                img="./images/felix.png"
+                name="Felix"
+                phone="(212) 555-4567"
+                email="thecat@hotmail.com"
+            />
+            <Contact 
+                img="./images/pumpkin.png"
+                name="Pumpkin"
+                phone="(0800) CAT KING"
+                email="pumpkin@scrimba.com"
+            />
+        </div>
+    )
+}
+export default App
+```
+- First we render 4 instances of the contact component. Then we add the properties to the components.
+- Next we need to go back and edit the contact component file to receive these properties (a.k.a. props).
+
+`Contact.js`
+```jsx
+import React from "react"
+
+export default function Contact(props) { 
+    return (
+        <div className="contact-card">
+            <img src="./images/mr-whiskerson.png"/>
+            <h3>Mr. Whiskerson</h3>
+            <div className="info-group">
+                <img src="./images/phone-icon.png" />
+                <p>(212) 555-1234</p>
+            </div>
+            <div className="info-group">
+                <img src="./images/mail-icon.png" />
+                <p>mr.whiskaz@catnap.meow</p>
+            </div>
+        </div>
+    )
+}
+```
+- Just like a normal JavaScript function that takes parameters, we can place props in our function Contact(props), we can call 'props' whatever we want, this is just convention.
+- If we were to console.log(props) we will see the information from our Contact instances we rendered in `App.js` as an Object.
+- Challenge - How might we change the Contact component to display all 4 cat contacts and their individual information?
+
+## Receiving Props in a Component
+
+`Contact.js`
+```jsx
+import React from "react"
+
+export default function Contact(props) { 
+    return (
+        <div className="contact-card">
+            <img src={props.image}/>
+            <h3>{props.name}</h3>
+            <div className="info-group">
+                <img src="./images/phone-icon.png" />
+                <p>{props.phone}</p>
+            </div>
+            <div className="info-group">
+                <img src="./images/mail-icon.png" />
+                <p>{props.email}</p>
+            </div>
+        </div>
+    )
 }
 ```
