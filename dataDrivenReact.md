@@ -446,4 +446,58 @@ A common way of using props is to destructure the object and pull out all the pr
     )
 }
 ```
+## Array.map()
+> The map() method creates a new array populated with the results of calling a provided function on every element in the calling array. 
+[MDN | Array.prototype.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
 
+### Challenge 1
+```js
+
+Given an array of numbers, return an array of each number, squared
+*/
+const nums = [1, 2, 3, 4, 5]
+// -->       [1, 4, 9, 16, 25]
+
+// Your code here
+const squared = nums.map(n => n * n)
+
+console.log(squared)
+```
+### Challenge 2
+```js
+
+/*
+Challenge 2:
+Given an array of strings, return an array where 
+the first letter of each string is capitalized
+*/
+
+const names = ["alice", "bob", "charlie", "danielle"]
+// -->        ["Alice", "Bob", "Charlie", "Danielle"]
+// Your code here
+
+const firstLetterCapitalized = names.map(name => name[0].toUpperCase() + name.slice(1) )
+console.log(firstLetterCapitalized)
+
+```
+### Challenge 3
+
+```js
+/*
+Challenge 3:
+Given an array of strings, return an array of strings that wraps each
+of the original strings in an HTML-like <p></p> tag.
+
+E.g. given: ["Bulbasaur", "Charmander", "Squirtle"]
+return: ["<p>Bulbasaur</p>", "<p>Charmander</p>", "<p>Squirtle</p>"]
+*/
+
+const pokemon = ["Bulbasaur", "Charmander", "Squirtle"]
+// -->          ["<p>Bulbasaur</p>", "<p>Charmander</p>", "<p>Squirtle</p>"]
+// Your code here
+
+const pTag = pokemon.map(pokemon => `<p>${pokemon}</p>`)
+console.log(pTag)
+
+```
+```
