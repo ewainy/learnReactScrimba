@@ -568,4 +568,15 @@ that can be displayed on the page.
 It makes our code more "self-sustaining" - not requiring
 additional changes whenever the data changes.
 
-## 
+## 'key' 🔑
+
+> A “key” is a special string attribute you need to include when creating lists of elements. Keys help React identify which items have changed, are > added, or are removed. Keys should be given to the elements inside the array to give the elements a stable identity. The best way to pick a key 
+> is to use a string that uniquely identifies a list item among its siblings. Most often you would use IDs from your data as keys. [React Docs](https://reactjs.org/docs/lists-and-keys.html)
+
+```jsx
+const todoItems = todos.map((todo) =>
+  <li key={todo.id}>
+    {todo.text}
+  </li>
+);
+```
