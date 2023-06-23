@@ -684,5 +684,29 @@ Let's clean it up a little bit if we just log props.item, so with that it means 
 
 Note: to fix this component properly, we need to now make sure our properties match the data, such as image is actually 'coverImg'. Review count and Rating are part of stats, so we need to do: {props.item.stats.rating} etc.
 
+## Spread Object as Props
+
+There is one other way of passing properties into a component, this has to do with the object spread syntax, an es6 feature > linked here the using the spread syntax with object literals >
+[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#spread_in_object_literals]
+
+
+The idea is that instead of creating our own prop called item that we passed the entire object down through, what we can do is just put a set of curly braces and spread the item into our components props essentially what this does is it takes the data ID title description, price, etc. and creates a separate prop for each one of them kind of like we had before we were passing in the item individually so it would look like ID = item.id, title = item.title, description = item.description and so forth and so on until it has covered every property in our data.
+
+``` jsx
+
+export default function App() {
+    const cards = data.map(item => {
+        return (
+            <Card
+                key={item.id}
+                {...item}
+                
+            />
+        )
+    })
+
+```
+
+Note: This can look confusing, and I will probably not use this method, it is here for transparency.
 
 
