@@ -129,3 +129,37 @@ function App() {
 ReactDOM.render(<App />, document.getElementById('root'));
 
 ```
+
+
+## Props Vs State
+<img width="500" alt="Props" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/9ae2157e-575a-4741-a800-490f59c5471b">
+
+<img width="500" alt="State" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/642ecd5a-c42b-4f10-a02b-96bdae3a2747">
+
+## Props vs State Quiz
+
+1. How would you describe the concept of "state"?
+A way for React to remember saved values from within a component.
+This is similar to declaring variables from within a component,
+with a few added bonuses (which we'll get to later)
+
+
+2. When would you want to use props instead of state?
+Anytime you want to pass data into a component so that
+component can determine what will get displayed on the
+screen.
+
+
+3. When would you want to use state instead of props?
+Anytime you want a component to maintain some values from
+within the component. (And "remember" those values even
+when React re-renders the component).
+
+
+4. What does "immutable" mean? Are props immutable? Is state immutable?
+Unchanging. Props are immutable. State is mutable.
+
+
+
+
+
