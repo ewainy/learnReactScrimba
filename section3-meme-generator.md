@@ -39,3 +39,28 @@ React:
     )
 
 ```
+
+## Current Conundrum
+
+## Quick Challenge (1)
+We have a locally defined array with two strings in: thing one and thing two. Map over the things array, generate a paragraph element of every item in the array and then render those items below the button.
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+function App() {
+    const thingsArray = ["Thing 1", "Thing 2"]
+    const thingsElements = thingsArray.map(thing => <p key={thing}>{thing}</p>)
+    
+    return (
+        <div>
+            <button>Add Item</button>
+            {thingsElements}
+        </div>
+    )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+```
