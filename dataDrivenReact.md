@@ -592,5 +592,97 @@ const todoItems = todos.map((todo) =>
  - In JSX, {cond && <A />} means “if cond, render <A />, otherwise nothing”.
 
 
+## Pass Object as Props
+
+``` jsx
+
+import Card from "./components/Card"
+import data from "./data"
+
+export default function App() {
+    const cards = data.map(item => {
+        return (
+            <Card
+                key={item.id}
+                img={item.coverImg}
+                rating={item.stats.rating}
+                reviewCount={item.stats.reviewCount}
+                location={item.location}
+                title={item.title}
+                price={item.price}
+                openSpots={item.openSpots}
+            />
+        )
+    })        
+    
+            // <Hero />
+    return (
+        <div>
+            <Navbar />
+            <section className="cards-list">
+                {cards}
+            </section>
+        </div>
+    )
+}
+
+```
+When we have a component that's in charge of maybe displaying one or two pieces of data it's not that big of a deal to pass each of those pieces of data down individually as separate props, however, we can see our card component is starting to get a bit lengthy! 
+
+Along the theme of React being just JavaScript what we can opt to do instead of passing each of these properties of our data down individually, is we can just say I'm just going to give this component the entire item object.
+Note: we keep the key because it's something unique that we need to include any time we're using map but for all the other properties of data that we need my card to know about we're just going to pass the entire item object down.
+Because we're changing the structure of our card, everything will be broken but it's at this point we should truly have an understanding of how props works and how the things that we pass down to our components can get received by the component.
+
+
+### Challenge: Fix our component! 😱
+
+
+``` jsx
+import React from "react"
+
+export default function Card(props) {
+    let badgeText
+
+    // console log props
+    console.log(props)
+    
+    if (props.openSpots === 0) {
+        badgeText = "SOLD OUT"
+    } else if (props.location === "Online") {
+        badgeText = "ONLINE"
+    }
+    
+  
+    
+    return (
+        <div className="card">
+            {badgeText && <div className="card--badge">{badgeText}</div>}
+            <img src={`../images/${props.item.img}`} className="card--image" />
+            <div className="card--stats">
+                <img src="../images/star.png" className="card--star" />
+                <span>{props.item.rating}</span>
+                <span className="gray">({props.item.reviewCount}) • </span>
+                <span className="gray">{props.item.location}</span>
+            </div>
+            <p className="card--title">{props.item.title}</p>
+            <p className="card--price"><span className="bold">From ${props.item.price}</span> / person</p>
+        </div>
+    )
+}
+
+```
+
+First step, let's console.log props! 
+
+``` js
+{item: {id: 1, title: "Life Lessons with Katie Zaferes", description: "I will share with you what I call "Positively Impactful Moments of Disappointment." Throughout my career, many of my highest moments only came after setbacks and losses. But learning from those difficult moments is what gave me the ability to rise above them and reach my goals.", price: 136, coverImg: "katie-zaferes.png", stats: {rating: 5, reviewCount: 6}, location: "Online", openSpots: 0}}
+```
+
+You'll notice in the console that there is an item property in our props so props.item and that item is the object with all of the properties from our data.
+
+Let's clean it up a little bit if we just log props.item, so with that it means that all we really need to do is change anywhere we were referring to individual props as a part of the props object like props.image, we just need to change it to props.item.image.
+
+Note: to fix this component properly, we need to now make sure our properties match the data, such as image is actually 'coverImg'. Review count and Rating are part of stats, so we need to do: {props.item.stats.rating} etc.
+
 
 
