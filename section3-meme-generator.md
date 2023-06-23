@@ -64,3 +64,68 @@ function App() {
 ReactDOM.render(<App />, document.getElementById('root'));
 
 ```
+
+## Challenge 2
+
+ Add an event listener to the button so when it is clicked, it adds another thing to our array.
+ * Hint: use the array length + 1 to determine the number of the "Thing" being added. Also, have your event listener
+   console.log(thingsArray) after adding the new item to the array
+   
+ * Spoiler: the page won't update when new things get added to the array!
+
+``` jsx
+function App() {
+    const thingsArray = ["Thing 1", "Thing 2"]
+    const thingsElements = thingsArray.map(thing => <p key={thing}>{thing}</p>)
+    
+    function addItem() {
+        const newThingText = `Thing ${thingsArray.length + 1}`
+        thingsArray.push(newThingText)
+        console.log(thingsArray)
+    }
+    
+    return (
+        <div>
+            <button onClick={addItem}>Add Item</button>
+            {thingsElements}
+        </div>
+    )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+```
+
+(Quoted from Bob Ziroll) 
+Notice: Our array is changing but of course what we see on the screen is not and this brings us to our conundrum at this point React is not looking at local arrays that are just saved within a component to determine whether or not something should get to be rendered or rather if the return here should run again with an updated value for things elements actually maybe more specifically I'm determining my things elements way up here at the top back when things array is just two items long and then it sort of cementing this things elements into its memory and no matter what I do to change things array it's not going to on early days I thought maybe if I put this: `jsx const thingsElements = thingsArray.map(thing => <p key={thing}>{thing}</p>)`  below add item or something like that it might make a difference but that's not going to change the fact that this line of code will only run one time and that's the very first time.
+
+Now one thing that might be tempting to do is inside of our add item function to say well let's not just update our array let's actually select the elements on the screen using document.getElementById and finding out where the container for these items is and then pushing an element to that list and the truth is when you're just using plain `JavaScript` that's essentially what you have to do but if you think back to one of our earlier sections we talked about how React is `declarative` and this is one of the major benefits of having a declarative library like React it makes it so that all we really need to do is update our data and React will automatically well react to that change and update our UI to display what has changed in the data all we need to be in charge of is making sure that the data updates correctly and React will handle the rest however for that to work we need to access something called `React state` and state will allow us to sort of hook into the component and make it so that whenever we update our state, which is really just values, that we're saving inside of this component it makes it so React will update the user interface based on any changes that happen to those values that are being saved in state.
+
+Truthfully if you think of pretty much any website that you interact with, if it were made in React, any kind of interaction you had would change the state. The first thing that comes to mind is maybe a playlist or a recipe or you hit the little heart icon or maybe a bookmark icon and it fills it in and likely sends a message out to a database that updates the fact that you have liked a recipe or a song.
+Any of those interactions in React are going to be updating state which then makes it so that React can update the user interface to responds to however you interact with the page.
+
+So now lets update this using state and you can see how it will actually start to work again the way we originally expected.
+
+#### With State
+``` jsx
+function App() {
+    const [things, setThings] = React.useState(["Thing 1", "Thing 2"])
+    
+    function addItem() {
+        const newThingText = `Thing ${things.length + 1}`
+        setThings(prevState => [...prevState, newThingText])
+    }
+    
+    const thingsElements = things.map(thing => <p key={thing}>{thing}</p>)
+    
+    return (
+        <div>
+            <button onClick={addItem}>Add Item</button>
+            {thingsElements}
+        </div>
+    )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+```
