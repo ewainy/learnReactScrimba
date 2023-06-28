@@ -276,3 +276,9 @@ function App() {
     )
 }
 ``` 
+
+The last piece we need to fix is making it so that our add item button will add something to our things array however, there is a small gotcha in here, and that is that it's tempting to want to do something like things array.push() but we cant do that.  
+> What is wrong with doing array.push()?
+> Hint: We can refer to our previous Props v State explanations
+
+The reason why we cant do array.push() is we should `never ever directly modify our state`. In this case, our state is things array and we would be directly modifying it if we used .push(), it is a destructive action and therefore we would be changing the things array which is not a good idea and will not work. We know we need to use set things array in order to modify our state.
