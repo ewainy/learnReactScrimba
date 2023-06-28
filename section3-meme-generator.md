@@ -42,7 +42,7 @@ React:
 
 ## Current Conundrum
 
-## Quick Challenge (1)
+### Quick Challenge (1)
 We have a locally defined array with two strings in: thing one and thing two. Map over the things array, generate a paragraph element of every item in the array and then render those items below the button.
 
 ```jsx
@@ -65,7 +65,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 ```
 
-## Challenge 2
+### Challenge 2
 
  Add an event listener to the button so when it is clicked, it adds another thing to our array.
  * Hint: use the array length + 1 to determine the number of the "Thing" being added. Also, have your event listener
@@ -283,7 +283,7 @@ The last piece we need to fix is making it so that our add item button will add 
 
 The reason why we cant do array.push() is we should `never ever directly modify our state`. In this case, our state is things array and we would be directly modifying it if we used .push(), it is a destructive action and therefore we would be changing the things array which is not a good idea and will not work. We know we need to use set things array in order to modify our state.
 
-### Challenge 2 
+#### Challenge 2 
 
 Write the addItem function.
 - We know we need to use set things array in order to modify our state.
