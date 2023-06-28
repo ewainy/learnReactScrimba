@@ -282,3 +282,72 @@ The last piece we need to fix is making it so that our add item button will add 
 > Hint: We can refer to our previous Props v State explanations
 
 The reason why we cant do array.push() is we should `never ever directly modify our state`. In this case, our state is things array and we would be directly modifying it if we used .push(), it is a destructive action and therefore we would be changing the things array which is not a good idea and will not work. We know we need to use set things array in order to modify our state.
+
+### Challenge 2 
+
+Write the addItem function.
+- We know we need to use set things array in order to modify our state.
+> What are the two options we can put in the setThingsArray?
+
+1. We can either have a <new value> which completely replaces the old value of our state with the new value
+2. or we can provide it with a <callback function> and that callback function will receive as its parameter, the old version of state, which we can use to determine the new version of state.
+
+> Which option should we use?
+
+- If we went with the <new value> option, we wouldnt be able to add anything to our existing array. We would simply be replacing the existing array with a new value.
+
+- As we want to add an item to the array, we should use the <callback function> option to see what our old state value, or old array is so that we can use that value and add to it for our new array.
+
+- Let’s do our callback function as an arrow function, we can put prevThingsArray. Let's figure out what we need to add or what we need to return in this callback function to correctly update our array with the new thing that we want to add. Remember every time we click add item, we want to determine the length of the array and just add 'Thing' + the new length of the array, so it should automatically put 'Thing 3' when we next click on the add item button.
+```jsx
+   setThingsArray(prevThingsArray => what do we put here?)
+```
+
+#### Caution
+
+Another really tempting thing to do at this point is to say prevThingsArray.push however again this is not correct this prev things array is still a reference to our existing state and using .push() on it is not a good idea because that would be modifying state directly, not only that but .push() actually doesn't return the array that is modified it returns the new length of the array so this would be like replacing all of our state with a number which would just be 3 so in two ways this really isn't going to work for us.
+
+```jsx
+// DONT DO THIS
+   setThingsArray(prevThingsArray => prevThingsArray.push())
+```
+Remember we need to return a new version of state and our state starts out as an array, in fact our program expects thingsArray to be an array because we're using `.map` on it so we need to make sure that when we are setting a new array that we return a new array, this is a new version of state. Fortunately with es6 there's a really easy way for us to `spread` in our existing array, which we have access to with preThingsArray, which by itself would get an array of everything that used to be in there - so this is not yet updating it, however we can very simply add a new item to the end of our array, using some JavaScript to determine the array length and what our Thing + number should be.
+
+```jsx
+  setThingsArray(prevThingsArray => {
+            return [...prevThingsArray, `Thing ${prevThingsArray.length + 1}`]
+        })
+```
+
+
+``` jsx
+
+function App() {
+  
+
+    const [thingsArray, setThingsArray] = React.useState(["Thing 1", "Thing 2"]) // New array held in state
+
+  /*  function addItem() {
+        // const newThingText = `Thing ${thingsArray.length + 1}`
+        // thingsArray.push(newThingText)
+        // document.getElementById()
+        // console.log(thingsArray)
+    } */
+
+/* New addItem function */
+  function addItem() {
+          setThingsArray(prevThingsArray => {
+            return [...prevThingsArray, `Thing ${prevThingsArray.length + 1}`]
+        })
+    }
+    
+    const thingsElements = thingsArray.map(thing => <p key={thing}>{thing}</p>)
+    
+    return (
+        <div>
+            <button onClick={addItem}>Add Item</button>
+            {thingsElements}
+        </div>
+    )
+}
+``` 
