@@ -351,3 +351,84 @@ function App() {
     )
 }
 ``` 
+### Complex State: Objects
+
+#### Challenge 1
+Fill in the values in the markup using the properties of our state object. (Ignore `isFavorite` for now)
+     
+``` jsx
+
+import React from "react"
+
+export default function App() {
+    const [contact, setContact] = React.useState({
+        firstName: "John",
+        lastName: "Doe",
+        phone: "+1 (719) 555-1212",
+        email: "itsmyrealname@example.com",
+        isFavorite: false
+    })
+   
+    
+    function toggleFavorite() {
+        console.log("Toggle Favorite")
+    }
+    
+    return (
+        <main>
+            <article className="card">
+                <img src="./images/user.png" className="card--image" />
+                <div className="card--info">
+                    <img 
+                        src={`../images/star-empty.png`} 
+                        className="card--favorite"
+                        onClick={toggleFavorite}
+                    />
+                    <h2 className="card--name">
+                        // John Doe
+                        {contact.firstName} {contact.lastName}
+                    </h2>
+                    <p className="card--contact">
+                        // +1 (719) 555-1212</p>
+                            {contact.phone} 
+                    <p className="card--contact">
+                            // itsmyrealname@example.com</p>
+                        {contact.email}
+                </div>
+                
+            </article>
+        </main>
+    )
+}
+
+```
+
+### Challenge 2
+
+Use a ternary to determine which star image filename should be used based on the `contact.isFavorite` property
+- `true` => "star-filled.png"
+-  `false` => "star-empty.png"
+Then use the starIcon value to display the correct image
+
+   ``` jsx
+
+   // let starIcon = // Your code here
+   let starIcon = contact.isFavorite ? "star-filled.png" : "star-empty.png";
+
+    
+    function toggleFavorite() {
+        console.log("Toggle Favorite")
+    }
+
+       return (
+        <main>
+            <article className="card">
+                <img src="./images/user.png" className="card--image" />
+                <div className="card--info">
+                    <img 
+                        src={`../images/${starIcon`} // changed to variable
+                        className="card--favorite"
+                        onClick={toggleFavorite}
+                    />
+
+   ```
