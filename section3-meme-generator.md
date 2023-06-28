@@ -242,3 +242,37 @@ Whenever you DO need the previous value to determine the new value
 
 
 
+### Complex State: Arrays
+
+#### Challenge 1
+
+
+Convert the code below to use an array held in state instead of a local variable. Initialize the state array with the same 2 items below. Don't worry about fixing `addItem` quite yet.
+  
+
+``` jsx
+
+function App() {
+  
+   // const thingsArray = ["Thing 1", "Thing 2"] // Array local variable 
+
+    const [thingsArray, setThingsArray] = React.useState(["Thing 1", "Thing 2"]) // New array held in state
+
+    function addItem() {
+        // We'll work on this next
+        // const newThingText = `Thing ${thingsArray.length + 1}`
+        // thingsArray.push(newThingText)
+        // document.getElementById()
+        // console.log(thingsArray)
+    }
+    
+    const thingsElements = thingsArray.map(thing => <p key={thing}>{thing}</p>)
+    
+    return (
+        <div>
+            <button onClick={addItem}>Add Item</button>
+            {thingsElements}
+        </div>
+    )
+}
+``` 
