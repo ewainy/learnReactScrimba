@@ -403,7 +403,7 @@ export default function App() {
 
 ```
 
-### Challenge 2
+#### Challenge 2
 
 Use a ternary to determine which star image filename should be used based on the `contact.isFavorite` property
 - `true` => "star-filled.png"
@@ -431,4 +431,62 @@ Then use the starIcon value to display the correct image
                         onClick={toggleFavorite}
                     />
 
+   ```
+
+   ### Complex State: Updating State Objects
+
+  Our goal is to be able to click the star icon and have it flip our is favorite value from true to false or false the true. However currently our is favorite property is nested inside of this object, when we call setContact we need to provide a new version of state to replace the old version, however in our case we don't want to replace any of this other information only the is favourite value.
+
+Many people's first thought is to use setContact, look at the previousContact state, and return where the is favorite property is the opposite of the previous contact’s. However, there is a major problem with doing it this way….
+
+
+``` jsx
+
+export default function App() {
+    const [contact, setContact] = React.useState({
+        firstName: "John",
+        lastName: "Doe",
+        phone: "+1 (719) 555-1212",
+        email: "itsmyrealname@example.com",
+        isFavorite: true
+    })
+    
+    let starIcon = contact.isFavorite ? "star-filled.png" : "star-empty.png"
+    
+    function toggleFavorite() {
+        setContact(prevContact => {
+            return {
+                isFavorite: !prevContact.isFavorite  // can you guess what is wrong with this way?
+            }
+        })
+    }
+
+```
+
+Remember that in this callback function, whatever we return from that function will become the new replacement for our contact state. Currently we have an object with five properties: first name, last name, phone, email and is favorite but what I'm replacing it with is an object that only has one property is favorite, so if we click our toggle favorite you'll see that all of our other information just disappears, however it does look like our star is working it can click our star and it is correctly flipping back but obviously this is a bug .
+
+If you have had experience in class-based React this might seem confusing to you, in class-based React, when you use this.setState it would automatically figure out how to combine your old object with the new property that you're trying to replace it with. However using hooks with React, use state no longer does this. 
+
+The main point is that we need to make sure that we bring in all of the properties of our old object and then replace the one or two or however many properties we need to replace. A very simple way for us to do that is to `spread` in all of the properties of our old contact (and in this case we have access to the old contact using prevContact) using our spread operator and overwrite our isFavourite with whatever we need it to be.
+
+
+   ``` jsx
+
+   export default function App() {
+    const [contact, setContact] = React.useState({
+        firstName: "John",
+        lastName: "Doe",
+        phone: "+1 (719) 555-1212",
+        email: "itsmyrealname@example.com",
+        isFavorite: false
+    })
+    
+    let starIcon = contact.isFavorite ? "star-filled.png" : "star-empty.png"
+    
+  function toggleFavorite() {
+        setContact(prevContact => ({
+            ...prevContact,
+            isFavorite: !prevContact.isFavorite
+        }))
+    }
    ```
