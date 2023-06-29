@@ -433,9 +433,9 @@ Then use the starIcon value to display the correct image
 
    ```
 
-   ### Complex State: Updating State Objects
+  ### Complex State: Updating State Objects
 
-  Our goal is to be able to click the star icon and have it flip our is favorite value from true to false or false the true. However currently our is favorite property is nested inside of this object, when we call setContact we need to provide a new version of state to replace the old version, however in our case we don't want to replace any of this other information only the is favourite value.
+Our goal is to be able to click the star icon and have it flip our is favorite value from true to false or false the true. However currently our is favorite property is nested inside of this object, when we call setContact we need to provide a new version of state to replace the old version, however in our case we don't want to replace any of this other information only the is favourite value.
 
 Many people's first thought is to use setContact, look at the previousContact state, and return where the is favorite property is the opposite of the previous contact’s. However, there is a major problem with doing it this way….
 
@@ -490,3 +490,57 @@ The main point is that we need to make sure that we bring in all of the properti
         }))
     }
    ```
+
+### Refactor State: Meme Generator
+#### Challenge 
+
+Update our state to save the meme-related data as an object called `meme`. It should have the following 3 properties:
+- topText, bottomText, randomImage.
+The 2 text states can default to empty strings for now, and randomImage should default to "http://i.imgflip.com/1bij.jpg"
+<br>
+Next, create a new state variable called `allMemeImages` which will default to `memesData`, which we imported.
+<br>
+Lastly, update the `getMemeImage` function and the markup to reflect our newly reformed state object and array in the correct way.
+
+``` jsx
+import React from "react"
+import memesData from "../memesData.js"
+
+export default function Meme() {
+    
+    
+    const [memeImage, setMemeImage] = React.useState("http://i.imgflip.com/1bij.jpg")
+    
+    
+    function getMemeImage() {
+        const memesArray = memesData.data.memes
+        const randomNumber = Math.floor(Math.random() * memesArray.length)
+        setMemeImage(memesArray[randomNumber].url)
+        
+    }
+    
+    return (
+        <main>
+            <div className="form">
+                <input 
+                    type="text"
+                    placeholder="Top text"
+                    className="form--input"
+                />
+                <input 
+                    type="text"
+                    placeholder="Bottom text"
+                    className="form--input"
+                />
+                <button 
+                    className="form--button"
+                    onClick={getMemeImage}
+                >
+                    Get a new meme image 🖼
+                </button>
+            </div>
+            <img src={memeImage} className="meme--image" />
+        </main>
+    )
+}
+```
