@@ -672,8 +672,6 @@ Theres a really cool thing that React does for us, that is whenever state change
 ### Setting State from Child Components
 
 #### Challenge:
-
-Challenge: 
 - Move the star image into its own component (Star)
 - It should receive a prop called `isFilled` that it uses to determine which icon it will display
 - Import and render that component, passing the value of `isFavorite` to the new `isFilled` prop.
@@ -774,7 +772,7 @@ Import Star from './Star'
 The conundrum that we have is that we have a child component that's receiving the value of isFavorite through props but it is not receiving the ability to change that state so think for second how can I give my child component the ability to make changes to the state that lives inside the parent component which is App?
 One thing that can be tricky when your first learning React is the thought that you can just add a click event listener on your custom (star) component so what if I just said `onClick={togglFavorite}` you'll see well it's not quite working, *why do you think that this isn't enough for this to work?*
 
-**Event Listeners & Custom Components**
+#### Event Listeners & Custom Component
 Remember when we have a component that we created a custom component that we created all of the properties that we pass it are custom properties, so simply putting `onClick` doesn't magically register it as an event listener the onClick attribute needs to exist on `native DOM elements` like these ones that begin with the lower case letters that's because these are what will actually get created into real DOM elements by React.
 However Star with a capital S is not a real DOM element, instead what's happening is React is looking at the Star component and it's rendering an image, this image has the ability to receive an onClick event listener, so what we could do is still pass onClick here but realize that onClick is just a custom prop that happens to be called the same name as the event listener. In fact oftentimes this will be changed to `handleClick` just to make it very obvious that it's not a native event listener and then over in our Star component we can add a real onClick event listener and say the value of this onClick will be the function that comes from props.handleClick.
 In this case our app component is passing this toggleFavorite function to a child component and allowing that child component to run it whenever a certain event like the click event happens. However it's important to note that the context in which the toggleFavorite function exists is still here in the parent, which means that it can change the state that lives inside the parent.
@@ -782,9 +780,6 @@ In this case our app component is passing this toggleFavorite function to a chil
 ``` jsx
 
 import React from "react"
-
-
-
 
 export default function Star(props) {
 
@@ -831,5 +826,37 @@ We created our toggleFavorite function and we passed it to our custom component 
 Over in the star component, it's receiving props and it's registering a real event listener onClick whose functional value is the function that we received through props.handleClick 
 
 The ability to pass state setter functions like this one down to children components is especially crucial in React and that due to the fact that the way that React's hierarchy is set up when it passes data.
+
+### Passing Data Around
+
+**A high level look at how data is passed from one component to another in React**
+
+Let's imagine we have a fairly simple app which has the following components just represented by rectangles for now in this tree this top component represents a top-level component for example our app component in a system setup like this and the lines indicate that this top component is rendering these other components in some cases that component may just render regular DOM elements like divs and h1's or it may render additional custom components like we see in this box where it's rendering two other components 
+
+
+The image represents a parent child relationship between these components let's imagine on one of these bottom level components we initialize some state and then we find that a sibling component in other words a component that is also rendered by the same parent is in need of some of the data that lives in the other components state well what exactly can we do then?
+<img width="500" alt="Passing data to componenets siblings" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/35e605a3-a9c2-4a64-8034-f7e787132b5d">
+
+
+Is there a way for us to pass that state to a sibling component? It turns out that no, this is not possible and that's because if you look in the file of a component that has a sibling component it has no reference or knowledge about a sibling component on its own, only its immediate parent component knows that both of these components exist
+
+#### Raising State Up
+What is it that we need to do if we're facing a situation like this? Well what if we took our state in this child component and we *raised* it up into the parent component? Now that it's up in the parent component, do we have a way in React to pass data from this parent component to the child components? Yes we do, that happens through *props* so now the parent component is in charge of the state, it passes the necessary state down to the child components that require it and they can simply consume the state.
+If that state were ever to change React will update this component where the state changed and it will also update any children components as well and so therefore if that state changes that's being passed through props the child component can update as well.
+<img width="500" alt="Passing data through props" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/6dc163a4-7cd4-477c-9bfe-fe17298abf3d">
+
+
+As your application gets more and more complex you will find yourself having another component that sometimes needs access to that state as well and just like before there's no way for us to pass the state or any kind of data from one sibling component to another component, but it's also important to note that there also is no way to pass data upwards in React, a child component has no idea that this other, let’s say uncle or aunt, component exists.
+<img width="500" alt="Passing data uncle aunt component" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/ef4131a1-d0a1-435f-a0d2-ff963f312212">
+
+
+Therefore there's no way to pass data state that way either, so this brings us back to the same solution we have before we simply *raise state up* a level and we pass more props downward.
+
+
+Now over time this can get pretty tedious especially if your state ends up raising up multiple levels of the component that needs it, in which case React does offer a solution to this called `context` there's also third-party state management systems like `redux` that can help solve this problem.
+
+
+#### Data flow: Keep state as local as you can
+Understanding that this is the way data flows in React can be really crucial in helping you architect your application in a way that you can share state amongst only the components that need it, in fact that's an important distinction to make at this point it wouldn't be a great idea to initialize state way up near the top of your component if you don't have components along the entire tree that need it, now I'm not saying that every component needs to have access to that state for it to work, but if this component down here is the only one that needs state there's no reason for me to put state in its parent or its grandparent and then pass stuff down through props as a rule of thumb **keep state as local as you can** or in other words *keep it as closely tied to the component or components that need it as you possibly can*.
 
 
