@@ -601,3 +601,72 @@ export default function Meme() {
     )
 }
 ```
+
+### Passing State as Props
+
+#### Challenge:
+- Create a new component named Count
+- It should receive a prop called `number`, whose value is the current value of our count
+ - Have the component render the whole div.counter--count and display the incoming prop `number`
+ - Replace the div.counter--count below with an instance of the new Count component
+
+Before:
+```jsx
+import React from "react"
+
+export default function App() {
+    const [count, setCount] = React.useState(0)
+    
+    function add() {
+        setCount(prevCount => prevCount + 1)
+    }
+    
+    function subtract() {
+        setCount(prevCount => prevCount - 1)
+    }
+    
+   
+    return (
+        <div className="counter">
+            <button className="counter--minus" onClick={subtract}>–</button>
+            <div className="counter--count">
+                <h1>{count}</h1>
+            </div>
+            <button className="counter--plus" onClick={add}>+</button>
+        </div>
+    )
+}
+}
+```
+`Count`
+``` jsx
+import React from "react"
+import Count from "./Count"
+
+export default function Count(props) {
+
+    return (
+       
+            <div className="counter--count">
+                <h1>{props.number}</h1>
+            </div>
+    )
+}
+```
+`App`
+```jsx
+
+/* New change: replacing counter--count with Count component */
+
+import Count from './Count'
+
+    return (
+        <div className="counter">
+            <button className="counter--minus" onClick={subtract}>–</button>
+          <Count number={count} />
+            <button className="counter--plus" onClick={add}>+</button>
+        </div>
+    )
+```
+Theres a really cool thing that React does for us, that is whenever state changes it will re-render the component where the state exists and any child components that may rely on state to be working correctly.
+
