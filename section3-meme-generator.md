@@ -641,7 +641,6 @@ export default function App() {
 `Count`
 ``` jsx
 import React from "react"
-import Count from "./Count"
 
 export default function Count(props) {
 
@@ -669,4 +668,168 @@ import Count from './Count'
     )
 ```
 Theres a really cool thing that React does for us, that is whenever state changes it will re-render the component where the state exists and any child components that may rely on state to be working correctly.
+
+### Setting State from Child Components
+
+#### Challenge:
+
+Challenge: 
+- Move the star image into its own component (Star)
+- It should receive a prop called `isFilled` that it uses to determine which icon it will display
+- Import and render that component, passing the value of `isFavorite` to the new `isFilled` prop.
+- Don't worry about the abiliity to flip this value quite yet. Instead, you can test if it's working by manually changing `isFavorite` in state.
+
+Before:
+```jsx
+import React from "react"
+
+export default function App() {
+    const [contact, setContact] = React.useState({
+        firstName: "John",
+        lastName: "Doe",
+        phone: "+1 (719) 555-1212",
+        email: "itsmyrealname@example.com",
+        isFavorite: false
+    })
+    
+    
+    
+    let starIcon = contact.isFavorite ? "star-filled.png" : "star-empty.png"
+    
+    function toggleFavorite() {
+        setContact(prevContact => ({
+            ...prevContact,
+            isFavorite: !prevContact.isFavorite
+        }))
+    }
+    
+    return (
+        <main>
+            <article className="card">
+                <img src="./images/user.png" className="card--image" />
+                <div className="card--info">
+                    <img 
+                        src={`../images/${starIcon}`} 
+                        className="card--favorite"
+                        onClick={toggleFavorite}
+                    />
+                    <h2 className="card--name">
+                        {contact.firstName} {contact.lastName}
+                    </h2>
+                    <p className="card--contact">{contact.phone}</p>
+                    <p className="card--contact">{contact.email}</p>
+                </div>
+                
+            </article>
+        </main>
+    )
+}
+```
+`Star`
+
+``` jsx
+
+import React from "react"
+
+export default function Star(props) {
+
+// let starIcon = contact.isFavorite ? "star-filled.png" : "star-empty.png" // We dont have access to contact, we are receiving a prop 'isFilled'
+
+const starIcon = props.isFilled? "star-filled.png" : "star-empty.png"
+
+    return (
+        <img 
+                        src={`../images/${starIcon}`} 
+                        className="card--favorite"
+                        // onClick={props.???}
+                    />
+    )
+}
+
+```
+`App`
+``` jsx
+Import Star from './Star'
+
+  return (
+
+        <main>
+            <article className="card">
+                <img src="./images/user.png" className="card--image" />
+                <div className="card--info">
+                    <Star isFilled={contact.isFavorite} /> // onClick={toggleFavorite} 
+                    <h2 className="card--name">
+                        {contact.firstName} {contact.lastName}
+                    </h2>
+                    <p className="card--contact">{contact.phone}</p>
+                    <p className="card--contact">{contact.email}</p>
+                </div>
+                
+            </article>
+        </main>
+    )
+
+```
+#### Challenge Conundrum
+The conundrum that we have is that we have a child component that's receiving the value of isFavorite through props but it is not receiving the ability to change that state so think for second how can I give my child component the ability to make changes to the state that lives inside the parent component which is App?
+One thing that can be tricky when your first learning React is the thought that you can just add a click event listener on your custom (star) component so what if I just said `onClick={togglFavorite}` you'll see well it's not quite working, *why do you think that this isn't enough for this to work?*
+
+**Event Listeners & Custom Components**
+Remember when we have a component that we created a custom component that we created all of the properties that we pass it are custom properties, so simply putting `onClick` doesn't magically register it as an event listener the onClick attribute needs to exist on `native DOM elements` like these ones that begin with the lower case letters that's because these are what will actually get created into real DOM elements by React.
+However Star with a capital S is not a real DOM element, instead what's happening is React is looking at the Star component and it's rendering an image, this image has the ability to receive an onClick event listener, so what we could do is still pass onClick here but realize that onClick is just a custom prop that happens to be called the same name as the event listener. In fact oftentimes this will be changed to `handleClick` just to make it very obvious that it's not a native event listener and then over in our Star component we can add a real onClick event listener and say the value of this onClick will be the function that comes from props.handleClick.
+In this case our app component is passing this toggleFavorite function to a child component and allowing that child component to run it whenever a certain event like the click event happens. However it's important to note that the context in which the toggleFavorite function exists is still here in the parent, which means that it can change the state that lives inside the parent.
+
+``` jsx
+
+import React from "react"
+
+
+
+
+export default function Star(props) {
+
+// let starIcon = contact.isFavorite ? "star-filled.png" : "star-empty.png" // We dont have access to contact, we are receiving a prop 'isFilled'
+
+const starIcon = props.isFilled? "star-filled.png" : "star-empty.png"
+
+    return (
+        <img 
+                        src={`../images/${starIcon}`} 
+                        className="card--favorite"
+                        onClick={props.handleClick}
+                    />
+    )
+}
+
+```
+`App`
+``` jsx
+
+Import Star from './Star'
+
+  return (
+
+        <main>
+            <article className="card">
+                <img src="./images/user.png" className="card--image" />
+                <div className="card--info">
+                    <Star isFilled={contact.isFavorite} handleClick={toggleFavorite}  /> 
+                    <h2 className="card--name">
+                        {contact.firstName} {contact.lastName}
+                    </h2>
+                    <p className="card--contact">{contact.phone}</p>
+                    <p className="card--contact">{contact.email}</p>
+                </div>
+                
+            </article>
+        </main>
+    )
+
+```
+**Recap:**
+We created our toggleFavorite function and we passed it to our custom component in a custom prop called handleClick 
+Over in the star component, it's receiving props and it's registering a real event listener onClick whose functional value is the function that we received through props.handleClick 
+
+The ability to pass state setter functions like this one down to children components is especially crucial in React and that due to the fact that the way that React's hierarchy is set up when it passes data.
+
 
