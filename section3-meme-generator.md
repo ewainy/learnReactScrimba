@@ -903,11 +903,11 @@ function App() {
     )
 }
 
-### React Forms
+## Forms in React
 
 The main difference in React forms is that instead of waiting until the very end of the process of filling out the form when the form is submitted and then gathering the data, instead what we do is we create `state` and every keystroke change or checkbox change or radio button change etc we update state and therefore we are watching these inputs, every keystroke or every change that's made to our form then when the time to submit comes there's no more work really to be done, we've already have gathered the data and we simply submit that to our API and pass in the state that we have been tracking all along.
 
-### Watching for Input Changes in React
+#### Watching for Input Changes in React
 
 As a reminder in vanilla JavaScript we would have a submit button and when we click that submit button it would run a function, gather all the data at that time and then submit it to an API or wherever.
 What we'll be doing in React instead is maintaining up-to-date state for every change, to accomplish this there's a few things we need to do,  first of all we need some states to hold the current data that's typed into an input box, just like we've been learning we can do *const [first name, setFirstName] = React.useState(“”)* we will set an empty string as the default because we would expect our input to be an empty input box in the beginning,  but now what we need to do is listen for any changes that happen: think what event listener we might use to accomplish this? 
@@ -947,7 +947,7 @@ export default function Form() {
     )
 }
 ```
-### Challenge:
+#### Challenge:
 Track the applicant's last name as well - Notice this is *not* DRY and not practical. 
 
 ``` jsx
@@ -1161,3 +1161,144 @@ export default function Form() {
     )
 }
 ```
+### Forms in React: TextArea
+In HTML, text area is different to input, it isnt self closing: <textarea></textarea>
+In React, they’ve chosen to make it similar to the text based input, making it a self closing element.
+
+Example:
+   ```jsx <textarea
+               value={formData.comments}
+               placeholder="Comments"
+               onChange={handleChange}
+               name="comments"
+           />
+```
+
+### Forms in React: Checkbox
+
+Checkboxes aren't just an HTML element on their own called checkbox. They are an input with a `type` of checkbox. Checkboxes are fundamentally different than what we have been working with so far with our text inputs because they just hold boolean values in other words there's not going to be some kind of string text of my checkbox instead there is a `checked` property that will either be true or false based on whether the user has checked the box or not.
+
+
+#### Labels
+When we have a label that is supposed to be tied to another input you have a couple options: you could nest the input directly inside of the children of the label, what that does is if the label gets clicked it will automatically propagate that click down to the input, or keep the label as its own separate element and then point that label using htmlFor to the ID of an input so that they can be associated with one another.
+
+``` jsx
+<input
+               type="checkbox"
+               id="isFriendly"
+           />
+           <label htmlFor="isFriendly">Are you friendly?</label>
+```
+Continued:
+Anyway so now we have a checkbox that asks the person if they're friendly or not and we want to maintain this in state well because it's a checkbox we're not maintaining a string so up in state I'm going to add another piece of state, we'll call it isFriendly and set it to true as the default. 
+As briefly mentioned, to associate our state isFriendly with our checkbox we're not going to use something like a value property but instead we're going to use a `checked` property now because a checkbox is either checked or unchecked the value that we put in here for checked needs to be a boolean, or at least whatever you put in will be interpreted as a boolean, so I'm going to say checked = {formData. isFriendly}
+
+
+If we look closely at our handleChange function, we have only been looking at event.target.value - however with a checkbox we are not looking at the value property anymore we're looking at a checked property. Let’s rewrite our function so we can accommodate this.
+
+
+A best practice that we should be following :  not to put the entire event.target.value and event.target.name inside of our setFormData(), a much better way to handle this is to `destructure event.target` and pull out the values that we need so we need name and value from event.target and then I can switch this to name and switch this to value and then as I mentioned when we're handling a checkbox there's a few more things we need to pass in. One property that will come in is this type property on all of our inputs we have a type text email and down here our type of checkbox so let's bring in that type so we can check whether or not the input that's making this handleChange function run is a type of checkbox and if it is we're also going to need the checked property and this is either going to be true or false depending on how the user has interacted with the checkbox. 
+Now comes a bit of a trick when I'm setting my form data I want everything else essentially to be the same, however the piece of state that I want to update if it's a checkbox in our case isFriendly property should not take on value but rather should take on the value of *checked* so I can use a ternary here that says is the type equal to checkbox ? if so I want you to use the checked property but if not I want you to use the value property.
+
+
+``` jsx
+import React from "react"
+
+
+export default function Form() {
+   const [formData, setFormData] = React.useState(
+       {
+           firstName: "",
+           lastName: "",
+           email: "",
+           comments: "",
+           isFriendly: true
+       }
+   )
+  
+   function handleChange(event) {
+       const {name, value, type, checked} = event.target // Better Way -Destructured
+       
+setFormData(prevFormData => {
+          return {
+               ...prevFormData,
+               // [event.target.name]: event.target.value // Less Ideal
+
+
+               [name]: type === "checkbox" ? checked : value // Better Way
+           }
+       })
+   }
+  
+   return (
+       <form>
+           <input
+               type="text"
+               placeholder="First Name"
+               onChange={handleChange}
+               name="firstName"
+               value={formData.firstName}
+           />
+           <input
+               type="text"
+               placeholder="Last Name"
+               onChange={handleChange}
+               name="lastName"
+               value={formData.lastName}
+           />
+           <input
+               type="email"
+               placeholder="Email"
+               onChange={handleChange}
+               name="email"
+               value={formData.email}
+           />
+           <textarea
+               value={formData.comments}
+               placeholder="Comments"
+               onChange={handleChange}
+               name="comments"
+           />
+           <input
+               type="checkbox"
+               id="isFriendly"
+               checked={formData.isFriendly}
+               onChange={handleChange}
+               name="isFriendly"
+           />
+           <label htmlFor="isFriendly">Are you friendly?</label>
+           <br />
+       </form>
+   )
+}
+
+```
+
+
+
+
+
+### Forms in React: Radio Buttons
+### Forms in React: Select
+### Forms in React: Submitting the form
+
+### Forms: Quiz!
+​​1. In a vanilla JS app, at what point in the form submission process do you gather all the data from the filled-out form?
+Right before the form is submitted.
+
+
+2. In a React app, when do you gather all the data from the filled-out form?
+As the form is being filled out. The data is all held in local state.
+
+
+3. Which attribute in the form elements (value, name, onChange, etc.) should match the property name being held in state for that input?
+`name` property.
+
+
+4. What's different about saving the data from a checkbox element vs. other form elements?
+A checkbox uses the `checked` property to determine what should be saved in state. Other form elements use the `value` property instead.
+
+
+5. How do you watch for a form submit? How can you trigger a form submit?
+- Can watch for the submit with an onSubmit handler on the `form` element.
+- Can trigger the form submit with a button click.
