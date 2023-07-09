@@ -1105,4 +1105,59 @@ export default function Form() {
 }
 
 ```
+### Controlled Inputs : Controlled Components
+Something you might come across as you're learning about React is something called `controlled components` (refer to React docs for more context)
 
+When we're talking about maintaining state inside of a component there's a common concept called the `single source of truth` the idea is that the state that you're maintaining in your component should be the single source of truth.
+
+Currently in the markup inside of our inputs, each of these inputs in effect is holding its own state, think how in a regular HTML form no React involved at all when the user types into an input box essentially that input box is maintaining its own state… Well in this case we have two pieces of state, one is being held by the input box just in regular HTML and the other is updating on every keystroke held in our React code, of course we have set it up so that this state of our input box then perfectly gets mirrored by our state in React however a good practice in React is to make it so that your *React state is what drives the state that's visible inside the input box*
+
+
+#### Value Property
+All this really boils down to is simply adding a `value` property to each one of our inputs so here at the bottom of each one I'll add value equals and then a set of curly braces and then all we need to do is add the piece of state in other words formData. and then the name of that specific input into that value, so we'll add formData.firstName then last name and email etc. visually we're not going to see any difference here conceptually however when I type into the first name ‘Bob’ the value of this input box is no longer being controlled by the input but rather by React. Every change that I make runs my handleChange function, which then updates the correct piece of state which re-renders my form and it sets the value of my form input to be whatever state is, so now state is in the driver's seat telling the input box what to display rather than the input box telling the state what to be.
+The main reason to learn this about controlled components is because sometimes if you don't set this up correctly React might sometimes complain about having uncontrolled components, fortunately the concept itself is more difficult to understand than actually implementing it so if you don't feel like diving deep into understanding controlled components just remember that you need to: `set the value of your inputs to be equal to your state that represents that input value`
+
+```jsx
+import React from "react"
+
+export default function Form() {
+    const [formData, setFormData] = React.useState(
+        {firstName: "", lastName: "", email: ""}
+    )
+    
+    function handleChange(event) {
+        setFormData(prevFormData => {
+            return {
+                ...prevFormData,
+                [event.target.name]: event.target.value
+            }
+        })
+    }
+    
+    return (
+        <form>
+            <input
+                type="text"
+                placeholder="First Name"
+                onChange={handleChange}
+                name="firstName"
+                value={formData.firstName}
+            />
+            <input
+                type="text"
+                placeholder="Last Name"
+                onChange={handleChange}
+                name="lastName"
+                value={formData.lastName}
+            />
+            <input
+                type="email"
+                placeholder="Email"
+                onChange={handleChange}
+                name="email"
+                value={formData.email}
+            />
+        </form>
+    )
+}
+```
