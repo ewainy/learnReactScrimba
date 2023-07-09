@@ -947,9 +947,44 @@ export default function Form() {
     )
 }
 ```
+### Challenge:
+Track the applicant's last name as well - Notice this is *not* DRY and not practical. 
 
+``` jsx
+import React from "react"
 
+export default function Form() {
+    const [firstName, setFirstName] = React.useState("")
+    const [lastName, setLastName] = React.useState("")
+    
+    console.log(firstName, lastName)
+    
+    function handleFirstNameChange(event) {
+        setFirstName(event.target.value)
+    }
+    
+    function handleLastNameChange(event) {
+        setLastName(event.target.value)
+    }
+    
+    return (
+        <form>
+            <input
+                type="text"
+                placeholder="First Name"
+                onChange={handleFirstNameChange}
+            />
+            <input
+                type="text"
+                placeholder="Last Name"
+                onChange={handleLastNameChange}
+            />
+        </form>
+    )
+}
+```
 
+Everything is working but we can clearly see this is not ideal, especially when you think of some of maybe the crazy forms that you filled out before that have let's say 20 or maybe even upwards of 50 input boxes, it's not going to work great for us to have a separate change function for each one of those and a separate piece of state for each one of those. So next what we'll do is we'll learn how to combine our state into an object and how to use the event parameter that we're receiving in our event handlers to determine which property of that state object we should be updating.
 
 
 
