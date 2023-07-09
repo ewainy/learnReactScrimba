@@ -1279,6 +1279,141 @@ setFormData(prevFormData => {
 
 
 ### Forms in React: Radio Buttons
+In React, radio buttons are kind of an interesting combination of checkboxes and text inputs.
+Let's talk about how we can hook these radio buttons into our form and connect it with our state, first we need a place in state to hold all of this information - let’s add another property to our state called employment and where checkboxes are either true or false radio buttons similar to inputs will have some kind of text value to the. In this case we want employment to be some kind of string either unemployed, part-time or full-time so on a high level overview what will happen is when the user clicks one of these options we will be watching for changes in these inputs and when a change happens it will take the value of that specific radio button that was clicked and set our state to that value.
+
+
+In order to associate our inputs with the correct piece of state and also to make it so that we can't click all of our inputs at once, we need to add a name property to each one of these inputs like we've done before. We will set the name equal to employment which exactly matches the property that we are saving in state - the reason we're giving the same name to all three of these radio buttons is first of all in HTML that's the way that we make it so only one of these radio buttons can be selected at any given time, but it also intuitively makes sense because we're only updating one property of employment based on which one is selected. 
+Each one of these inputs will have its own unique value and this value is what will actually get saved as the value in state when this specific input is selected so for the unemployed option, we will put our value as unemployed then do the same for part-time and for full-time. 
+Next we need to make sure that we are listening for change events so we will add our onChange of handleChange.
+There's one more small thing that we need to change in its essentially mirroring what we did when we were setting our value equal to the state, radio buttons are a little different because we need to specify what value the state should take on if the radio button is selected or checked however that means that we can't do controlled components in the same way that we did with our inputs by setting the value equal to whatever the current value of state is. 
+
+
+Radio buttons are controlled in the same way that checkboxes are controlled. With our previous checkbox example, we were able to say checked = formData.isFriendly However if we try to do the exact same thing with our radio buttons we're going to run into a little bug, radio buttons differ from checkboxes in that when we are controlling the checked property we don't simply say checked = formData.employment because unlike a checkbox this is not a boolean value…
+But we can make it a boolean value by checking if the form.employment is equal to the value of the specific checkbox and now React is in charge of controlling this input rather than the input having its own HTML state.
+
+
+#### Recap:
+- Initially the value of formData.employment is an empty string, when we click the ‘unemployed’ option it runs the onChange for handleChange which we have defined. 
+- We're pulling the name value type and checked out and we're setting the form data.
+- We're bringing in all the old form data, now we're using name which we had set to employment as the key for our state that we're updating and it looks at our ternary: is the type checkbox? In reality no this is not a checkbox, it's a radio and so it skips the ‘checked’ value and instead uses value.
+- This value is the value that we define on our checkbox options where we set its either as unemployed part-time or full-time 
+- Then when we change state, React re-renders our form. It checks to see if the current formData.employment is equal to unemployed - in our case since that's the one we chose and that becomes a true statement and therefore checked is true and all of these other checks are false that makes it so that only one of these can be checked at any given time.
+
+
+
+``` jsx
+import React from "react"
+
+export default function Form() {
+    const [formData, setFormData] = React.useState(
+        {
+            firstName: "", 
+            lastName: "", 
+            email: "", 
+            comments: "", 
+            isFriendly: true,
+            employment: ""
+        }
+    )
+    console.log(formData.employment)
+    
+    function handleChange(event) {
+        const {name, value, type, checked} = event.target
+        setFormData(prevFormData => {
+            return {
+                ...prevFormData,
+                [name]: type === "checkbox" ? checked : value
+            }
+        })
+    }
+    
+    return (
+        <form>
+            <input
+                type="text"
+                placeholder="First Name"
+                onChange={handleChange}
+                name="firstName"
+                value={formData.firstName}
+            />
+            <input
+                type="text"
+                placeholder="Last Name"
+                onChange={handleChange}
+                name="lastName"
+                value={formData.lastName}
+            />
+            <input
+                type="email"
+                placeholder="Email"
+                onChange={handleChange}
+                name="email"
+                value={formData.email}
+            />
+            <textarea 
+                value={formData.comments}
+                placeholder="Comments"
+                onChange={handleChange}
+                name="comments"
+            />
+            <input 
+                type="checkbox" 
+                id="isFriendly" 
+                checked={formData.isFriendly}
+                onChange={handleChange}
+                name="isFriendly"
+            />
+            <label htmlFor="isFriendly">Are you friendly?</label>
+            <br />
+            <br />
+            
+            <fieldset>
+                <legend>Current employment status</legend>
+                
+                <input 
+                    type="radio"
+                    id="unemployed"
+                    name="employment"
+                    value="unemployed"
+                  //  checked={formData.employment} // This will create a bug
+                    checked={formData.employment === "unemployed"}
+                    onChange={handleChange}
+                />
+                <label htmlFor="unemployed">Unemployed</label>
+                <br />
+                
+                <input 
+                    type="radio"
+                    id="part-time"
+                    name="employment"
+                    value="part-time"
+                    checked={formData.employment === "part-time"}
+                    onChange={handleChange}
+                />
+                <label htmlFor="part-time">Part-time</label>
+                <br />
+                
+                <input 
+                    type="radio"
+                    id="full-time"
+                    name="employment"
+                    value="full-time"
+                    checked={formData.employment === "full-time"}
+                    onChange={handleChange}
+                />
+                <label htmlFor="full-time">Full-time</label>
+                <br />
+                
+            </fieldset>
+        </form>
+    )
+}
+```
+
+
+
+
 ### Forms in React: Select
 ### Forms in React: Submitting the form
 
