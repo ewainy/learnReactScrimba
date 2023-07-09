@@ -987,5 +987,122 @@ export default function Form() {
 Everything is working but we can clearly see this is not ideal, especially when you think of some of maybe the crazy forms that you filled out before that have let's say 20 or maybe even upwards of 50 input boxes, it's not going to work great for us to have a separate change function for each one of those and a separate piece of state for each one of those. So next what we'll do is we'll learn how to combine our state into an object and how to use the event parameter that we're receiving in our event handlers to determine which property of that state object we should be updating.
 
 
+### Forms State Object
+Let's see how we can improve our form and how we're managing state so that when the time comes to add let's say 20 or 30 more inputs we don't end up drowning in duplicated code. Once you get to 3/4 or more inputs, it starts to make a lot more sense to `save your state in an object` instead of in separate variables, a benefit of doing that is it will receive one setter function, which we're going to learn how to use to update the correct piece of state in the object.
 
+
+Let's just dive into the syntax to make more sense of this (example below):
+Here let's change our function back to handleChange so we can figure out a way to make it more universal and I'll set my onChange to work for both of those, let’s also get rid of our extra piece of state and instead we're going to choose to save an object as our default and then object will have a first name property as an empty string and a last name property as an empty string. Then I'll change first name to something more generic like formData and setFormData 
+
+Example:
+```jsx
+import React from "react"
+
+export default function Form() {
+    const [formData, setFormData] = React.useState(
+        {firstName: "", lastName: ""}
+    )
+    
+    function handleChange(event) {
+        // new code to be filled in
+    }
+    
+    return (
+        <form>
+            <input
+                type="text"
+                placeholder="First Name"
+                onChange={handleChange}
+            />
+            <input
+                type="text"
+                placeholder="Last Name"
+                onChange={handleChange}
+            />
+        </form>
+    )
+}
+```
+
+If you remember back when we talked about the event that we're receiving in our handleChange event listener function, we saw how I can look at the value property to get the specific value that was typed into the input box, however at this point because an object is what we're saving in state, I can't simply say setFormData to event.target.value because that would erase my object and replace it with just a simple string and because I'm using the same handle change function on both of my inputs I need a way for the handleChange event to distinguish between which input it was that triggered that event.
+
+#### Input Name Property
+Well it turns out that a good practice that we're neglecting to do right now is to give each of our inputs a `name` property, this is true of regular HTML forms in any case but in React it's going to play a special role for us. What I can do is make the name property match exactly the property name in the state that we're saving and now I have access to `event.target.name` …Let's trigger the event to happen in the first name property and you can see it logs the first name property there, if I do it in the last name it logs last name well this is a great start we have access to the property of state that we want to change and we still have access to event.target.value which is the value that we want to change it to so now we have everything we need to call set form data and update our object correctly.
+
+``` jsx
+import React from "react"
+
+export default function Form() {
+    const [formData, setFormData] = React.useState(
+        {firstName: "", lastName: ""}
+    )
+    
+    function handleChange(event) {
+        console.log(event.target.name)
+    }
+    
+    return (
+        <form>
+            <input
+                type="text"
+                placeholder="First Name"
+                onChange={handleChange}
+                name="firstName"
+            />
+            <input
+                type="text"
+                placeholder="Last Name"
+                onChange={handleChange}
+                name="lastName"
+            />
+        </form>
+    )
+}
+```
+Let's go ahead and call setFormData, before when we were simply updating a string we didn't care about what the previous version of that string was because we were just going to overwrite it with whatever was in the input box, this time around however we do need to know what the old version of state was because we have other properties that we need to maintain instead of just overwrite. So I'll do a callback function in here, I'll use an arrow function and call my previous state with a prevFormData arrow function and open the function, my goal is to return a new object and I want to make sure I keep all of the old objects intact so I'm going to spread out the previous form data, then I'm going to overwrite the specific property that we're trying to override or update in this handleChange event listener.
+
+### Computed Properties
+Now on first inclination, you might try something like let's use event.target.name as the key and event.target.value as the value.  Of course we can see in our editor this is a syntax error - however with ESX there is a feature introduced called `computed properties` and what this allows me to do is to surround my key here in square brackets.
+Long story short it makes it so I can turn a dynamic string like something saved in a variable and use it as the property name for my object. let me add back my console log so we can look at our state every time it changes, let's save, we can see in the console that it's empty to start with and as I change the first name my object is updating correctly my last name is also still a part of my state as I update the last name that works correctly, my entire state is staying intact.
+
+
+
+``` jsx
+import React from "react"
+
+export default function Form() {
+    const [formData, setFormData] = React.useState(
+        {firstName: "", lastName: ""}
+    )
+    
+    console.log(formData)
+    
+    function handleChange(event) {
+        setFormData(prevFormData => {
+            return {
+                ...prevFormData,
+                [event.target.name]: event.target.value   // computed properties
+            }
+        })
+    }
+    
+    return (
+        <form>
+            <input
+                type="text"
+                placeholder="First Name"
+                onChange={handleChange}
+                name="firstName"
+            />
+            <input
+                type="text"
+                placeholder="Last Name"
+                onChange={handleChange}
+                name="lastName"
+            />
+        </form>
+    )
+}
+
+```
 
