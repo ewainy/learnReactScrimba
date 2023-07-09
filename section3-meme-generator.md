@@ -1700,3 +1700,116 @@ export default function App() {
     )
 }
 ```
+### Project: Add Text to Image
+
+``` jsx
+import React from "react"
+import memesData from "../memesData.js"
+
+export default function Meme() {
+    /**
+     * Challenge: 
+     * 1. Set up the text inputs to save to
+     *    the `topText` and `bottomText` state variables.
+     * 2. Replace the hard-coded text on the image with
+     *    the text being saved to state.
+     */
+    
+    const [meme, setMeme] = React.useState({
+        topText: "",
+        bottomText: "",
+        randomImage: "http://i.imgflip.com/1bij.jpg" 
+    })
+    const [allMemeImages, setAllMemeImages] = React.useState(memesData)
+    
+    
+    function getMemeImage() {
+        const memesArray = allMemeImages.data.memes
+        const randomNumber = Math.floor(Math.random() * memesArray.length)
+        const url = memesArray[randomNumber].url
+        setMeme(prevMeme => ({
+            ...prevMeme,
+            randomImage: url
+        }))
+        
+    }
+    
+    function handleChange(event) {
+        const {name, value} = event.target
+        setMeme(prevMeme => ({
+            ...prevMeme,
+            [name]: value
+        }))
+    }
+    
+    return (
+        <main>
+            <div className="form">
+                <input 
+                    type="text"
+                    placeholder="Top text"
+                    className="form--input"
+                    name="topText"
+                    value={meme.topText}
+                    onChange={handleChange}
+                />
+                <input 
+                    type="text"
+                    placeholder="Bottom text"
+                    className="form--input"
+                    name="bottomText"
+                    value={meme.bottomText}
+                    onChange={handleChange}
+                />
+                <button 
+                    className="form--button"
+                    onClick={getMemeImage}
+                >
+                    Get a new meme image 🖼
+                </button>
+            </div>
+            <div className="meme">
+                <img src={meme.randomImage} className="meme--image" />
+                <h2 className="meme--text top">{meme.topText}</h2>
+                <h2 className="meme--text bottom">{meme.bottomText}</h2>
+            </div>
+        </main>
+    )
+}
+```
+### Making API Calls:
+
+A very common thing you'll need to do in React is interact with an API that lives outside of your application. Usually what you're doing is either requesting information from an API or sometimes submitting information. Whenever you're requesting information from an API in React, usually you want to display or use that information somehow so getting data from an API in React consists of essentially two parts:
+First of all you need to get the data and that would be using something like fetch or another tool for getting data like Axios
+2. The second step would be to then take that data and save it to state. Once it's saved in state your application can interact with it, it can display it on the screen and all of the other benefits that come with saving something in state 
+
+Let's see some preliminary syntax: *Spoiler alert* you will be shown why it's broken to do it this way!
+
+To start us off, let's do a fetch request to the Star wars API, console.log the data and then change it to save the data to state.
+
+Now we’re going to illuminate what is going on behind the scenes right now, we're going to console log ‘component rendered;’ every time the app component renders or re-renders by React it will run this console log. If we open our console hit refresh: we've got an infinite loop of component rendering.
+Now think for a second- why was this console log running over and over and over again?
+
+The reason we were stuck in an infinite loop is because this fetch lives on sort of the top level of our component. Because of that anytime the component renders it's going to call fetch and every time it calls fetch it's going to set the Star wars data which is updating our state and therefore causing React to re-render this component and then it's running fetch again setting the state re rendering the component calling fetch again setting the state re rendering the component etc. We will look at how to handle side effects in React next.
+
+``` jsx
+
+import React from "react"
+
+export default function App() {
+    const [starWarsData, setStarWarsData] = React.useState({})
+    
+    console.log("Component rendered")
+    
+    fetch("https://swapi.dev/api/people/1")
+        .then(res => res.json())
+        .then(data => setStarWarsData(data))
+    
+    return (
+        <div>
+            <pre>{JSON.stringify(starWarsData, null, 2)}</pre>
+        </div>
+    )
+}
+
+```
