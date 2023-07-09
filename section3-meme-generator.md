@@ -847,6 +847,7 @@ If that state were ever to change React will update this component where the sta
 
 
 As your application gets more and more complex you will find yourself having another component that sometimes needs access to that state as well and just like before there's no way for us to pass the state or any kind of data from one sibling component to another component, but it's also important to note that there also is no way to pass data upwards in React, a child component has no idea that this other, let’s say uncle or aunt, component exists.
+
 <img width="500" alt="Passing data uncle aunt component" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/ef4131a1-d0a1-435f-a0d2-ff963f312212">
 
 
@@ -858,5 +859,98 @@ Now over time this can get pretty tedious especially if your state ends up raisi
 
 #### Data flow: Keep state as local as you can
 Understanding that this is the way data flows in React can be really crucial in helping you architect your application in a way that you can share state amongst only the components that need it, in fact that's an important distinction to make at this point it wouldn't be a great idea to initialize state way up near the top of your component if you don't have components along the entire tree that need it, now I'm not saying that every component needs to have access to that state for it to work, but if this component down here is the only one that needs state there's no reason for me to put state in its parent or its grandparent and then pass stuff down through props as a rule of thumb **keep state as local as you can** or in other words *keep it as closely tied to the component or components that need it as you possibly can*.
+
+#### Further Reading: 
+[Sharing State Between Components](https://react.dev/learn/sharing-state-between-components)
+
+### Boxes Challenges 
+
+
+TO FILL IN
+
+
+### Conditional Rendering Quiz
+
+1. What is "conditional rendering"?
+When we want to only sometimes display something on the page
+based on a condition of some sort
+
+
+2. When would you use &&?
+When you want to either display something or NOT display it
+
+
+3. When would you use a ternary?
+When you need to decide which thing among 2 options to display
+
+
+4. What if you need to decide between > 2 options on
+   what to display?
+Use an `if...else if... else` conditional or a `switch` statement
+
+
+function App() {
+    let someVar
+    if () {
+        someVar = <SomeJSX />
+    } else if() {
+        ...
+    } else {
+        ...
+    }
+    return (
+        <div>{someVar}</div>
+    )
+}
+
+### React Forms
+
+The main difference in React forms is that instead of waiting until the very end of the process of filling out the form when the form is submitted and then gathering the data, instead what we do is we create `state` and every keystroke change or checkbox change or radio button change etc we update state and therefore we are watching these inputs, every keystroke or every change that's made to our form then when the time to submit comes there's no more work really to be done, we've already have gathered the data and we simply submit that to our API and pass in the state that we have been tracking all along.
+
+### Watching for Input Changes in React
+
+As a reminder in vanilla JavaScript we would have a submit button and when we click that submit button it would run a function, gather all the data at that time and then submit it to an API or wherever.
+What we'll be doing in React instead is maintaining up-to-date state for every change, to accomplish this there's a few things we need to do,  first of all we need some states to hold the current data that's typed into an input box, just like we've been learning we can do *const [first name, setFirstName] = React.useState(“”)* we will set an empty string as the default because we would expect our input to be an empty input box in the beginning,  but now what we need to do is listen for any changes that happen: think what event listener we might use to accomplish this? 
+
+
+#### onChange
+Input elements have an event called `onChange` and we can set that equal to a function. Let's call it handleChange, let's declare that function and for now let's just console.log “changed” - we can see every keystroke that we make is running our function.
+
+
+#### Event Object
+Now one thing we haven't spent much time talking about is this parameter that we can actually receive as a part of our event listener function, in this case we don't get to decide what actually gets passed to our handleChange event listener function, instead what will get passed to it by the browser is an `event object`. This event object is really large, it has a lot of information in it, however, there’s one property on this event object we care most about, and that is one called `target`. 
+If we log `event.target` we'll see that it gives us the HTML element that triggered this event, now it looks like HTML in the console but in reality it's just the DOM object that triggered this event, that DOM object has properties that we care a lot about, for example the `value` property.
+
+Example:
+```jsx
+import React from "react"
+
+export default function Form() {
+    const [firstName, setFirstName] = React.useState("")
+    
+    console.log(firstName)
+    
+    function handleChange(event) {
+        console.log(event.target.value)
+         
+        setFirstName(event.target.value) // * Challenge: update the firstName state on every keystroke
+    }
+    
+    return (
+        <form>
+            <input
+                type="text"
+                placeholder="First Name"
+                onChange={handleChange}
+            />
+        </form>
+    )
+}
+```
+
+
+
+
+
 
 
