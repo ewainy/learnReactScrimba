@@ -1825,6 +1825,56 @@ Another task which we have mostly been learning about in this section is to mana
 
 Then naturally it's next task is sort of a combination of these two, it needs to `keep the user interface updated whenever state changes` there are certainly other tasks that React is accomplishing but you can probably boil the main three tasks down to these three.
 
-<img width="1020" alt="React cant handle" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/00d0da46-e3bf-4ba4-bd63-646a69bffd70">
+<img width="700" alt="React cant handle" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/00d0da46-e3bf-4ba4-bd63-646a69bffd70">
 
+#### What is React not able to handle on its own?
+The major one that we're going to be discussing is any kind of side effects - or I put outside effects here,  all that really means is anything that lives outside of React's purview or reach. So some examples of this are local storage on your own browser, for example we can of course use code to access local storage but React has no real hand in interfacing with local storage.
+
+
+Any kind of API or database interactions that occur in our code, we can write that code to interact with APIs but React is not in charge of that code, or rather React has no way to know which APIs we are going to be reaching out to.
+
+Similarly any kind of subscriptions you might have, if you include web sockets in your application, for example you have a chat application that updates live.
+And as it turns out, even if you have two different pieces of internal state that you need to sync together or have the state pieces of state react to a change in another piece of state, React can manage the state of each one behind the scenes, but it's not really looking at any kind of crossover between those two states. 
+So in the end, it boils down to basically anything that React is not in charge of, can be considered a side effect or an outside effect.
+
+
+So using this API interaction for an example if we look at our code from before I commented
+Essentially just doing what it's told it's trying to put something on the screen it's trying to manage state and it's trying to keep state and the screen in sync. If state ever changes, it needs to re-render the component.
+
+```jsx
+import React from "react"
+
+
+export default function App() {
+   const [starWarsData, setStarWarsData] = React.useState({})
+  
+   // console.log("Component rendered")
+  
+   // fetch("https://swapi.dev/api/people/1")
+   //     .then(res => res.json())
+   //     .then(data => setStarWarsData(data))
+      
+   // side effects
+  
+   return (
+       <div>
+           <pre>{JSON.stringify(starWarsData, null, 2)}</pre>
+       </div>
+   )
+}
+
+```
+
+As a side note if this were receiving props and somehow those props were also to change, for example if those props were a piece of state in a higher up component that then changed, this component would also re- render. So with our code living here on the top level of our component (commented out), React really doesn't have a way to stop us from setting the state here (setStarWarsData) causing the re-render, which would then set the state again causing the re- render and so forth in that infinite loop.
+
+
+So the React team gives us a really nice hook called useEffect.
+In the documentation this is called the effect hook and I like to think of it as a tool that react has given us developers to use sort of like a blank canvas that allows us to interract outside of the React ecosystem. Which again, mostly consists of state, props, and the user interface it puts on the page.
+I like to think of useEffect as being a tool that allows us to synchronize React state with those outside systems like like local storage or APIs
+
+### useEffect documentation/ links
+> https://react.dev/reference/react/useEffect
+> https://react.dev/learn/synchronizing-with-effects
+> https://react.dev/learn/you-might-not-need-an-effect
+> https://overreacted.io/a-complete-guide-to-useeffect/
 
