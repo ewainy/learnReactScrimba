@@ -1813,3 +1813,18 @@ export default function App() {
 }
 
 ```
+
+### Side effects in React - Intro to useEffect()
+
+<img width="700" alt="React's primary tasks" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/72003138-66b6-4781-bb23-687efa3a6e45">
+
+
+First of all React is in charge of working with the Dom and the browser to render some kind of user interface to the page. The React team has created a really simple interface to allow us as developers to accomplish this with JSX and elements just like HTML, under the hood of course, React is taking that JSX and turning it into elements that can be displayed on the page.
+
+Another task which we have mostly been learning about in this section is to manage state for us, and if you think carefully about it it's managing that state between the render cycles. In other words React can remember state values from one render to the next. So that's another thing that React does, and we are allowed to hook into that state using the useState hook. 
+
+Then naturally it's next task is sort of a combination of these two, it needs to `keep the user interface updated whenever state changes` there are certainly other tasks that React is accomplishing but you can probably boil the main three tasks down to these three.
+
+<img width="1020" alt="React cant handle" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/00d0da46-e3bf-4ba4-bd63-646a69bffd70">
+
+
