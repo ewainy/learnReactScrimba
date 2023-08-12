@@ -1878,3 +1878,51 @@ I like to think of useEffect as being a tool that allows us to synchronize React
 > https://react.dev/learn/you-might-not-need-an-effect
 > https://overreacted.io/a-complete-guide-to-useeffect/
 
+### useEffect Syntax and Default Behaviour
+
+UseEffect has one required parameter and one optional second parameter.
+The required first parameter is a function - a callback function.
+This function acts as a place for us to put our side effects code in, the little example we have here, this fetch request is considered a side effect and that's because it's reaching out side of React’s ecosystem, but also trying to set some state in the process.
+
+Let's move this fetch request inside of our useEffect hook - and that's it.
+Inside of the callback function that we provide to useEffect, we're allowed to put our code that has other side effects. Side effects that interact with systems outside of React, and maybe more specifically, interact with those outside systems to keep them in sync with our local state in this component.
+
+But- we’re only halfway there.
+
+
+``` jsx
+import React from "react"
+
+
+export default function App() {
+   const [starWarsData, setStarWarsData] = React.useState({})
+  
+   console.log("Component rendered")
+  
+  
+   // fetch("https://swapi.dev/api/people/1")
+   //     .then(res => res.json())
+   //     .then(data => setStarWarsData(data))
+      
+   
+   // side effects
+   React.useEffect(function() {
+       fetch("https://swapi.dev/api/people/1")
+           .then(res => res.json())
+           .then(data => setStarWarsData(data))
+   }, ???)
+  
+   return (
+       <div>
+           <pre>{JSON.stringify(starWarsData, null, 2)}</pre>
+       </div>
+   )
+}
+```
+
+In our code, in our call back function, if we don't provide a second parameter to our React useEffect function - there's almost no difference between putting our code inside of useEffect, and putting it outside of useEffect on the top level of our component. There is one small difference, and that is that anything that we put inside of this callback function is guaranteed to run only after the user interface has been painted to the screen. In other words, only after React has taken our user interface and created real elements on our page. 
+So this callback function is guaranteed to run in a specific order only after this has been placed on the DOM, but for our purposes here there's basically no difference, we're still stuck in an infinite loop. 
+
+So in the next section we're going to start diving into useEffect and understanding first why we need to provide the second parameter and then what that second parameter is and how it solves this problem.
+
+
