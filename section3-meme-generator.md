@@ -1987,4 +1987,28 @@ So now when I hit refresh it will run once, which is why we get “effect ran”
 
 Under the hood this is what's happening: when I hit refresh, state starts out as zero and the component will take count and replace it with a zero everywhere it can find it. So here in the dependencies array,  we would have an array with the number 0 in the first index, then when I click add, React will update the count from 0 to 1 and it will rerun my function or in other words re-render my app component where everywhere I'm using ‘count’ is now 1.
 
+### useEffect Quiz
+
+1. What is a "side effect" in React? What are some examples?
+- Any code that affects an outside system.
+- local storage, API, websockets, two states to keep in sync
+
+
+2. What is NOT a "side effect" in React? Examples?
+- Anything that React is in charge of.
+- Maintaining state, keeping the UI in sync with the data,
+ render DOM elements
+
+
+3. When does React run your useEffect function? When does it NOT run
+  the effect function?
+- As soon as the component loads (first render)
+- On every re-render of the component (assuming no dependencies array)
+- Will NOT run the effect when the values of the dependencies in the
+ array stay the same between renders
+
+
+4. How would you explain what the "dependencies array" is?
+- Second parameter to the useEffect function
+- A way for React to know whether it should re-run the effect function
 
