@@ -1,11 +1,12 @@
-# Dynamic Websites
+# Section 3, Meme Generator, Dynamic Websites
+
+Figma link for meme generator: https://www.figma.com/file/MoLwFPHNHJVrzdFurxHzNV/Meme-Generator?type=design&node-id=0-1&mode=design&t=A9kJufa55my3BpoT-0
 
 ## Static V Dynamic
-
-
-Figma link: https://www.figma.com/file/MoLwFPHNHJVrzdFurxHzNV/Meme-Generator?type=design&node-id=0-1&mode=design&t=A9kJufa55my3BpoT-0
-
 The primary thing that sets apart a static website like we've been building so far with web applications is the ability for the user to actually interact with our page in order for a user to interact with our page we have to be listening for different events on that page and then reacting when those events happen.
+
+<img width="1011" alt="static web pages" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/863d80ec-b40b-4401-8551-ed633831cfb6">
+<img width="1011" alt="dynamic web apps" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/a90a0ac7-02fb-4366-8a1e-94b7707472ea">
 
 ## Event Listeners
 
