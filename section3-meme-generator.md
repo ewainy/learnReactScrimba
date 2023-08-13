@@ -2111,3 +2111,32 @@ Then when I toggle off the window tracker, React recognizes that this component 
 useEffect takes two parameters; the first one is the effect that you want to run, the second one is any dependencies that React should watch for changes to rerun your effect function and that effect function is allowed to return another function that can clean up after any side effects that might be lingering. Now for many effects that you set up you might find yourself not actually needing to provide a cleanup function at all, which is fine, this is not a required part of useEffect for it to work.
 
 
+### useEffect with Async function  
+   useEffect takes a function as its parameter. If that function returns something, it needs to be a cleanup function. Otherwise, it should return nothing. 
+If we make it an async function, it automatically returns a promise instead of a function or nothing.
+Therefore, if you want to use async operations inside of useEffect, you need to define the function separately inside of the callback function, as seen below:
+
+```jsx
+
+
+  
+   React.useEffect(() => {
+       async function getMemes() {
+           const res = await fetch("https://api.imgflip.com/get_memes")
+           const data = await res.json()
+           setAllMemes(data.data.memes)
+       }
+
+
+       getMemes()
+      
+      /* return () => {
+          // cleanup function would go here, but not needed in this use case
+       } */ 
+   }, [])
+
+```
+Extra: Helpful tutorial by Todd Motto: https://ultimatecourses.com/blog/using-async-await-inside-react-use-effect-hook
+
+
+
