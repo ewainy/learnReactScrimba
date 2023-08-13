@@ -2139,4 +2139,5 @@ Therefore, if you want to use async operations inside of useEffect, you need to 
 Extra: Helpful tutorial by Todd Motto: https://ultimatecourses.com/blog/using-async-await-inside-react-use-effect-hook
 
 
+<img width="1013" alt="Scrimba Section 3 recap" src="https://github.com/ewainy/learnReactScrimba/assets/77060368/091117d9-9606-42c7-a52f-5b789922bba6">
 
