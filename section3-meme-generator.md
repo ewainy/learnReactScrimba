@@ -2012,7 +2012,7 @@ Under the hood this is what's happening: when I hit refresh, state starts out as
 - Second parameter to the useEffect function
 - A way for React to know whether it should re-run the effect function
 
-### useEffect: when to use dependencies
+### useEffect: When to Use Dependencies
 
 Challenge:   Combine `count` with the request URL so pressing the "Get Next Character" button will get a new character from the Star Wars API. * Remember: don't forget to consider the dependencies array!
 
@@ -2055,3 +2055,59 @@ Changed section:
 ```
 
 After the first render, it went to the API and got the character with the ID of 1 we can even see here in our UI, it says the count is 1. Then I'll click ‘get next character’ button, the count is 2 and after a little bit we get our next character, the one with the ID of 2, which is C3PO.  So when I click ‘get next character’ again, it updates count, updating count re-runs my function or rather re-renders my component. The effect then looks at the old array, which was an array with one item with the number of 2 in it, and then it looks at the new array which is an array with the number of 3 in it and notices that something has changed which is then a trigger to run my function again with the new number of 3 as count.
+
+
+### useEffect Cleanup Function - 
+One thing you should always try to be aware of when you are interfacing with side effects using useEffect is any potential consequences that might happen if you don't `clean up` the things that you do in that side effect.
+This is just one example where we're adding an event listener that is not getting cleaned up when this component unmounts.
+
+
+Another instance could be, you are creating a web socket connection with maybe a chat API and you have a little chat app that will update your screen automatically every time there's a new chat message on the server. Well when you create that subscription to the chat API, and then try to unmount the component, it's always a good idea to then sever that websocket connection as a way to `clean up` the effect that you have created in your useEffect.
+
+
+
+The useEffect cleanup is pretty easy to do, remember we have a function as our first parameter to useEffect but currently we're not actually returning anything from that function. Well as it turns out, what we can return from useEffect can be a function.
+
+So when React runs our useEffect function here, it will receive in return another function that it can use to then clean up any side effects that you might have created.
+In reality it has no idea what the side effects are that we created so what we put in the body of our cleanup function should be something that we write to clean up our own side effects.
+In the case of adding an event listener, there's a sister method called remove event listener, now with remove event listener we need to pass the exact same function that we provided when we added it. And now, with this cleanup function, when we resize the browser, we won't get a memory leak.
+
+```jsx
+import React from "react"
+
+
+export default function WindowTracker() {
+  
+   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth)
+  
+   React.useEffect(() => {
+       function watchWidth() {
+           console.log("Resizing...")
+           setWindowWidth(window.innerWidth)
+       }
+
+
+       window.addEventListener("resize", watchWidth)
+      
+       return function() {
+           console.log("Cleaning up...")
+           window.removeEventListener("resize", watchWidth)
+       }
+   }, [])
+  
+   return (
+       <h1>Window width: {windowWidth}</h1>
+   )
+}
+```
+
+
+Our app component is deciding when the window tracker component should be rendered as soon as we toggle that on and it renders it to the screen it sets the window with state, it determines what that should be based on the current window width at the instant that this component gets rendered.
+Remember, useEffect will only run after the DOM has been painted, or in other words once the H1 has been rendered to the screen.
+So after creating the state under our H1, it will register our useEffect, this useEffect has no dependencies because there's nothing inside of here that's going to make it re-register a new event listener. So it registers this event listener on the resize event of the window and then anytime I resize it is reacting to the event listener that I set up. 
+Then when I toggle off the window tracker, React recognizes that this component has reached the end of its lifecycle and it's about to be removed from the DOM. So it takes the function that it received from us when it first set up our useEffect and it just runs it, in fact it runs it kind of blindly, it doesn't know what that function contains - but we as the developers are expected to successfully clean up after our side effects and so we remove that event listener
+
+#### One last recap: 
+useEffect takes two parameters; the first one is the effect that you want to run, the second one is any dependencies that React should watch for changes to rerun your effect function and that effect function is allowed to return another function that can clean up after any side effects that might be lingering. Now for many effects that you set up you might find yourself not actually needing to provide a cleanup function at all, which is fine, this is not a required part of useEffect for it to work.
+
+
