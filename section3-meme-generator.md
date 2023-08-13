@@ -1925,4 +1925,66 @@ So this callback function is guaranteed to run in a specific order only after th
 
 So in the next section we're going to start diving into useEffect and understanding first why we need to provide the second parameter and then what that second parameter is and how it solves this problem.
 
+### useEffect Dependencies Array 
+
+To try and demonstrate exactly what's happening within useEffect I came up with the simplest little counter app that just has a single button that says ‘add’ and something that displays what the current count is in state. The reason I did this was just to make it so that we had a really easy way to trigger re-renders and state changes on our app.
+ I also replaced our useEffect callback function with just a console log that lets us know that this effect function ran. You can already see what's happening down in the console, but if I refresh the site, well first we get the component rendered console log and then we get the effect ran console log, as we talked about before, the function we pass to useEffect will run after every render of our component.
+
+It essentially makes it no different than moving our console log outside onto the top level of our function just like we have here, which means if we ever wanted to change the state within our useEffect, we get caught in that loop, like we've talked about a few times already.
+Now with my little counter, I can trigger a manual re-render by just clicking the add button, and we can see that when I click the add button it updates the state behind the scenes. So it changes from 0 to 1 and it re-renders our component, now with count equalling the number one, you get our console log which rendered because it's a function call here on the top level of our component.
+Then it would have skipped down here and rendered our UI so that it could display the correct count, now that count is set to 1, and last of all it ran our effect, which of course runs after every render. As we talked about, the first parameter to useEffect is this function but there's a second parameter which although I mentioned is optional is something that you will almost always include and that is something called a `dependencies array`.
+
+The array that we passed as a second parameter to useEffect will contain values that if they change from one render to the next, will cause this effect to run.
+In other words, it limits the number of times that this effect will run, or rather it determines when this effect will run instead of running after every single render.
+
+Now if I leave this as an empty array it effectively tells React “I want to run this function on the very first render of my component but then there are no dependencies to watch and trigger this effect to run again” so it ends up being it runs once when the component first loads and that's it never again.
+We can see this in action by refreshing our app, seeing that we did get effect ran and then adding to our count and from here adding to our count is no longer running this effect, and that's because we have an empty array which is not looking for any changes between one render and the next.
+
+```jsx
+import React from "react"
+
+
+export default function App() {
+   const [starWarsData, setStarWarsData] = React.useState({})
+   const [count, setCount] = React.useState(0)
+  
+   console.log("Component rendered")
+  
+   // side effects
+   React.useEffect(function() {
+       console.log("Effect ran")
+       // fetch("https://swapi.dev/api/people/1")
+       //     .then(res => res.json())
+       //     .then(data => console.log(data))
+   }, [])
+  
+   return (
+       <div>
+           <pre>{JSON.stringify(starWarsData, null, 2)}</pre>
+           <h2>The count is {count}</h2>
+           <button onClick={() => setCount(prevCount => prevCount + 1)}>Add</button>
+       </div>
+   )
+}
+
+
+```
+Now if I wanted to run this effect every time count changed I would have to make sure that my effect knew that count was one of the dependencies that signaled the effect to run again.
+
+```jsx
+​​// side effects
+   React.useEffect(function() {
+       console.log("Effect ran")
+       // fetch("https://swapi.dev/api/people/1")
+       //     .then(res => res.json())
+       //     .then(data => console.log(data))
+           }, [count]) 
+
+```
+
+So now when I hit refresh it will run once, which is why we get “effect ran” in the console, and now every time I hit ‘add’ I'm also running my effect again.
+
+
+Under the hood this is what's happening: when I hit refresh, state starts out as zero and the component will take count and replace it with a zero everywhere it can find it. So here in the dependencies array,  we would have an array with the number 0 in the first index, then when I click add, React will update the count from 0 to 1 and it will rerun my function or in other words re-render my app component where everywhere I'm using ‘count’ is now 1.
+
 
