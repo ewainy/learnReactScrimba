@@ -2012,3 +2012,46 @@ Under the hood this is what's happening: when I hit refresh, state starts out as
 - Second parameter to the useEffect function
 - A way for React to know whether it should re-run the effect function
 
+### useEffect: when to use dependencies
+
+Challenge:   Combine `count` with the request URL so pressing the "Get Next Character" button will get a new character from the Star Wars API. * Remember: don't forget to consider the dependencies array!
+
+```jsx
+    
+import React from "react"
+
+
+export default function App() {
+   const [starWarsData, setStarWarsData] = React.useState({})
+   const [count, setCount] = React.useState(1)
+
+
+  
+   React.useEffect(function() {
+       console.log("Effect ran")
+       fetch("https://swapi.dev/api/people/1")
+           .then(res => res.json())
+           .then(data => setStarWarsData(data))
+   }, [])
+  
+   return (
+       <div>
+           <h2>The count is {count}</h2>
+           <button onClick={() => setCount(prevCount => prevCount + 1)}>Get Next Character</button>
+           <pre>{JSON.stringify(starWarsData, null, 2)}</pre>
+       </div>
+   )
+}
+```
+Changed section:
+```jsx 
+   React.useEffect(function() {
+       console.log("Effect ran")
+       fetch(`https://swapi.dev/api/people/${count}`)
+           .then(res => res.json())
+           .then(data => setStarWarsData(data))
+   }, [count])
+
+```
+
+After the first render, it went to the API and got the character with the ID of 1 we can even see here in our UI, it says the count is 1. Then I'll click ‘get next character’ button, the count is 2 and after a little bit we get our next character, the one with the ID of 2, which is C3PO.  So when I click ‘get next character’ again, it updates count, updating count re-runs my function or rather re-renders my component. The effect then looks at the old array, which was an array with one item with the number of 2 in it, and then it looks at the new array which is an array with the number of 3 in it and notices that something has changed which is then a trigger to run my function again with the new number of 3 as count.
