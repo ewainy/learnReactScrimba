@@ -374,6 +374,91 @@ For this challenge, all we need to do is add some JavaScript in curly braces, we
 .split on the new line character\n, that will return an array, and we'll say at the index of 0, which should access the very first line of our note.
 
 
+### Notes App: Bump recent note to the top
+
+* Note, the update function below is a completely different approach than what is covered in the course *
+
+A sensible feature to add to our app: if the user ever edits a note in the sidebar, it should pop up to the top of the list.
+
+We have a function that exists that we can tap into whenever the user is editing a note and that's our function called updateNote.
+Currently we're using the map method so that the array of notes stays in place in that array, in other words if they edit note 1 it will always stay in the third position because that's just how .map works. It returns a new array where every original item is at the same index in the new array as it was in the original array, so if we're wanting to rearrange this array there may be a way to use .map to do that; however this could be complex so an alternative approach is advisable.
+
+
+```jsx
+export default function App() {
+   /**
+    * Challenge: When the user edits a note, reposition
+    * it in the list of notes to the top of the list
+    */
+   const [notes, setNotes] = React.useState(
+       () => JSON.parse(localStorage.getItem("notes")) || []
+   )
+   const [currentNoteId, setCurrentNoteId] = React.useState(
+       (notes[0] && notes[0].id) || ""
+   )
+  
+   React.useEffect(() => {
+       localStorage.setItem("notes", JSON.stringify(notes))
+   }, [notes])
+  
+   function createNewNote() {
+       const newNote = {
+           id: nanoid(),
+           body: "# Type your markdown note's title here"
+       }
+       setNotes(prevNotes => [newNote, ...prevNotes])
+       setCurrentNoteId(newNote.id)
+   }
+  
+ /*  function updateNote(text) {
+       // This does not rearrange the notes
+       setNotes(oldNotes => oldNotes.map(oldNote => {
+           return oldNote.id === currentNoteId
+               ? { ...oldNote, body: text }
+               : oldNote
+       }))
+       
+   } */
+
+```
+New updateNote function:
+```jsx
+function updateNote(text) {
+    setNotes((oldNotes) => {
+        // Step 1: Find the note with the currentNoteId and create a copy with updated body
+        const updatedNote = { ...oldNotes.find((note) => note.id === currentNoteId) };
+        updatedNote.body = text;
+
+        // Step 2: Remove the note with currentNoteId from the oldNotes array using filter
+        const filteredNotes = oldNotes.filter((note) => note.id !== currentNoteId);
+
+        // Step 3: Concatenate the updatedNote to the top of the filteredNotes array
+        return [updatedNote, ...filteredNotes];
+    });
+}
+
+```
+
+This approach is designed to:
+
+1. Find the note with the `currentNoteId` and create a copy of it with the updated `body` property.
+
+2. Use the `filter` method to remove the note with the `currentNoteId` from the `oldNotes` array.
+
+3. Concatenate the updated note with the filtered `oldNotes` array to ensure that the updated note is placed at the top.
+
+Here's a breakdown of how this code works:
+
+1. We use `setNotes` with a callback function to update the `notes` state based on the previous state (`oldNotes`).
+
+2. Within the callback, we find the note with the `currentNoteId` in the `oldNotes` array and create a copy of it with the updated `body`.
+
+3. We use the `filter` method to create a new array (`filteredNotes`) that excludes the note with the `currentNoteId`. This effectively removes the old version of the note from the array.
+
+4. Finally, we return a new array where the `updatedNote` is placed at the beginning (top) followed by the `filteredNotes`. This arrangement ensures that the most recently updated note is at the top of the list.
+
+This approach achieves the goal of updating the note and placing it at the top of the list while maintaining immutability.
+
 
 
 
