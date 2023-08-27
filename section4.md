@@ -459,7 +459,7 @@ Here's a breakdown of how this code works:
 
 This approach achieves the goal of updating the note and placing it at the top of the list while maintaining immutability.
 
-Notes App: Delete note
+### Notes App: Delete note
 
 The very last feature we're going to add to our notes app is the ability to delete notes.
 In the sidebar I added a button that has an icon inside and this icon has a trash icon that appears when you hover over one of the notes in the list. 
@@ -469,21 +469,22 @@ In other words, this trash icon is a child element of the note at the side next 
 
 #### Challenge: Complete and implement the deleteNote function
 Hints:
--1. What array method can be used to return a new array that has filtered out an item based on a condition?
+- 1. What array method can be used to return a new array that has filtered out an item based on a condition?
 - 2. Notice the parameters being passed to the function  and think about how both of those parameters
 can be passed in during the onClick event handler
 
 
-
-
 Before we work on the code here, let's test to make sure that we can successfully add the event listener to the trash icon button. I'm going to just add a console log that says deleted note and then maybe I'll add the note ID just to make sure that I'm successfully passing down the correct note.
+
+```jsx
  function deleteNote(event, noteId) {
        event.stopPropagation()
        console.log("deleted note", noteId)
        // Your code here
    }
-
+```
 Then we need to pass this function down through props to our sidebar component. We'll add a new prop called deleteNote which will just be the deleteNote function.
+```jsx
  <Sidebar
                    notes={notes}
                    currentNote={findCurrentNote()}
@@ -491,7 +492,7 @@ Then we need to pass this function down through props to our sidebar component. 
                    newNote={createNewNote}
                    deleteNote={deleteNote}
                />
-
+```
 
 and then in the sidebar.js file we're already receiving props so I will add an on-click event handler here.
 `sidebar.js`
