@@ -459,6 +459,205 @@ Here's a breakdown of how this code works:
 
 This approach achieves the goal of updating the note and placing it at the top of the list while maintaining immutability.
 
+Notes App: Delete note
+
+The very last feature we're going to add to our notes app is the ability to delete notes.
+In the sidebar I added a button that has an icon inside and this icon has a trash icon that appears when you hover over one of the notes in the list. 
+Right now clicking it doesn't do anything that's gonna be your challenge, however you can see that clicking the trash icon is also changing selected note from the sidebar and that caused me to run into a bug and so I started some of this code for you. We've got the function deleteNote that will receive an event and the note ID. I wrote this line ‘event.stop propagation’ without going in-depth. What it does is it says when this trash icon handles the click event stop propagating that click events to the parents, like the sidebar div that's holding this entire note. 
+In other words, this trash icon is a child element of the note at the side next to it and so when I click the trash currently it's propagating that click event through to the parent which is also handling a click event now the fact that it is still propagating that should tell you that my trash icon is not correctly using this deleteNote click event.
+
+
+#### Challenge: Complete and implement the deleteNote function
+Hints:
+-1. What array method can be used to return a new array that has filtered out an item based on a condition?
+- 2. Notice the parameters being passed to the function  and think about how both of those parameters
+can be passed in during the onClick event handler
+
+
+
+
+Before we work on the code here, let's test to make sure that we can successfully add the event listener to the trash icon button. I'm going to just add a console log that says deleted note and then maybe I'll add the note ID just to make sure that I'm successfully passing down the correct note.
+ function deleteNote(event, noteId) {
+       event.stopPropagation()
+       console.log("deleted note", noteId)
+       // Your code here
+   }
+
+Then we need to pass this function down through props to our sidebar component. We'll add a new prop called deleteNote which will just be the deleteNote function.
+ <Sidebar
+                   notes={notes}
+                   currentNote={findCurrentNote()}
+                   setCurrentNoteId={setCurrentNoteId}
+                   newNote={createNewNote}
+                   deleteNote={deleteNote}
+               />
+
+
+and then in the sidebar.js file we're already receiving props so I will add an on-click event handler here.
+`sidebar.js`
+```jsx
+import React from "react"
+
+
+export default function Sidebar(props) {
+   const noteElements = props.notes.map((note, index) => (
+       <div key={note.id}>
+           <div
+              
+               className={`title ${
+                   note.id === props.currentNote.id ? "selected-note" : ""
+               }`}
+               onClick={() => props.setCurrentNoteId(note.id)}
+           >
+               <h4 className="text-snippet">{note.body.split("\n")[0]}</h4>
+               <button
+                   className="delete-btn"
+                   onClick={(event) => props.deleteNote(event, note.id)} // our onClick event handler -  
+// See explanation below
+               >
+                   <i className="gg-trash trash-icon"></i>
+               </button>
+           </div>
+       </div>
+   ))
+
+
+   return (
+       <section className="pane sidebar">
+           <div className="sidebar--header">
+               <h3>Notes</h3>
+               <button className="new-note" onClick={props.newNote}>+</button>
+           </div>
+           {noteElements}
+       </section>
+   )
+}
+
+```
+Your first inclination might have been to just pass props.deleteNote here, however that's why I provided you the hint about what parameters we're passing to this function.
+`By default, whatever function we pass to an event handler will receive the event as its parameter` and in order to pass something else along with that, I either need to do some kind of magic with .bind, which I'm not going to get into… or more simply I can say this is my function that I want to call, this entire anonymous function, and the first line or only line of that function will call deleteNote. That way I can take the event that I'm receiving as a part of the on-click callback function and pass it along to my deleteNote function but then I can also tell it to pass the notes ID. Remember we're here inside of .map, and we have access to this note variable which has an ID property and that's what we're passing down to deleteNote as we're calling it. 
+
+`App.js`
+
+So now let's go to ‘app.js’ and finish implementing the deleteNote function. We are going to use array.filter, but in our case we're only going to filter out the one item based on this noteID.
+
+Since I'm updating my state, I'm going to call setNotes. I do need access to my old array of notes so I'll use the callback function with oldNotes as the parameter and I want to return a new array that results from calling oldNotes.filter. 
+notes.filter takes a callback function and whatever we return from this callback function needs to be a boolean to indicate whether the current item we’re iterating over in the original array should be included in the new array or not.
+So we'll say that for each note we're looking at, I want to make sure I include items whose ID property does not equal the note ID that we're trying to delete. 
+
+So once again we're looking at all of our notes, we want to run the filter method, we're going to look at each note in that array and if the ID does not equal the one we're trying to delete then this will result in true. Which means I do want it included in the new array that I'm returning from  .filter which means essentially if it's not the one that I click delete on, it will leave it alone and continue to exist in the array.
+However, for the one note that I did click delete on, note.ID will equal noteID and therefore this will be false and therefore that note that I click delete on will not be included in the array and thus it'll get removed from our state.
+
+```jsx
+function deleteNote(event, noteId) {
+       event.stopPropagation()
+       setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId))
+   }
+```
+
+``` jsx
+import React from "react"
+import Sidebar from "./components/Sidebar"
+import Editor from "./components/Editor"
+import { data } from "./data"
+import Split from "react-split"
+import {nanoid} from "nanoid"
+
+
+export default function App() {
+   const [notes, setNotes] = React.useState(
+       () => JSON.parse(localStorage.getItem("notes")) || []
+   )
+   const [currentNoteId, setCurrentNoteId] = React.useState(
+       (notes[0] && notes[0].id) || ""
+   )
+  
+   React.useEffect(() => {
+       localStorage.setItem("notes", JSON.stringify(notes))
+   }, [notes])
+  
+   function createNewNote() {
+       const newNote = {
+           id: nanoid(),
+           body: "# Type your markdown note's title here"
+       }
+       setNotes(prevNotes => [newNote, ...prevNotes])
+       setCurrentNoteId(newNote.id)
+   }
+  
+function updateNote(text) {
+    setNotes((oldNotes) => {
+        // Step 1: Find the note with the currentNoteId and create a copy with updated body
+        const updatedNote = { ...oldNotes.find((note) => note.id === currentNoteId) };
+        updatedNote.body = text;
+
+        // Step 2: Remove the note with currentNoteId from the oldNotes array using filter
+        const filteredNotes = oldNotes.filter((note) => note.id !== currentNoteId);
+
+        // Step 3: Concatenate the updatedNote to the top of the filteredNotes array
+        return [updatedNote, ...filteredNotes];
+    });
+}
+  
+   function deleteNote(event, noteId) {
+       event.stopPropagation()
+       setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId))
+   }
+  
+   function findCurrentNote() {
+       return notes.find(note => {
+           return note.id === currentNoteId
+       }) || notes[0]
+   }
+  
+   return (
+       <main>
+       {
+           notes.length > 0
+           ?
+           <Split
+               sizes={[30, 70]}
+               direction="horizontal"
+               className="split"
+           >
+               <Sidebar
+                   notes={notes}
+                   currentNote={findCurrentNote()}
+                   setCurrentNoteId={setCurrentNoteId}
+                   newNote={createNewNote}
+                   deleteNote={deleteNote}
+               />
+               {
+                   currentNoteId &&
+                   notes.length > 0 &&
+                   <Editor
+                       currentNote={findCurrentNote()}
+                       updateNote={updateNote}
+                   />
+               }
+           </Split>
+           :
+           <div className="no-notes">
+               <h1>You have no notes</h1>
+               <button
+                   className="first-note"
+                   onClick={createNewNote}
+               >
+                   Create one now
+               </button>
+           </div>
+          
+       }
+       </main>
+   )
+}
+
+
+
+```
+
+#### Reminder: Callback function + extra parameters than event
+The tricky thing that may have tripped some people up was adding this callback function that calls props.deleteNote, but as a quick reminder if you ever really need extra parameters other than just the event in your callback function then you're probably going to pass a whole callback function here instead of just calling props that delete note so that you can pass whatever parameters you want to your own function.
 
 
 
