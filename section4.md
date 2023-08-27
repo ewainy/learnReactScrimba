@@ -317,6 +317,61 @@ export default function App() {
 
 ```
 
+### Notes App: Note Summary Title
+
+Right now in our code, you can see when we're mapping over the notes, we grab the index and we display note and then the index plus one.
+ Unfortunately this doesn't give our users any idea as to the contents of that note, so your challenge is to try and figure out a way to display only the first line of the notes body property. By the way, note.body is the text that is showing up here in the UI editor and that first line should be pulled out and used as the summary that shows up here in our sidebar. 
+
+#### Challenge: Display first line of note
+
+```jsx
+export default function Sidebar(props) {
+   /**
+    * Challenge: Try to figure out a way to display only the
+    * first line of note.body as the note summary in the
+    * sidebar.
+    *
+    * Hint 1: note.body has "invisible" newline characters
+    * in the text every time there's a new line shown. E.g.
+    * the text in Note 1 is:
+    * "# Note summary\n\nBeginning of the note"
+    *
+    * Hint 2: See if you can split the string into an array
+    * using the "\n" newline character as the divider
+    */
+  
+   const noteElements = props.notes.map((note, index) => (
+       <div key={note.id}>
+           <div
+              
+               className={`title ${
+                   note.id === props.currentNote.id ? "selected-note" : ""
+               }`}
+               onClick={() => props.setCurrentNoteId(note.id)}
+           >
+            //   <h4 className="text-snippet">Note {index + 1}</h4>  // this changes from this to (see below)
+ <h4 className="text-snippet">{note.body.split("\n")[0]}</h4> // becomes this
+
+
+           </div>
+       </div>
+   ))
+
+
+   return (
+       <section className="pane sidebar">
+           <div className="sidebar--header">
+               <h3>Notes</h3>
+               <button className="new-note" onClick={props.newNote}>+</button>
+           </div>
+           {noteElements}
+       </section>
+   )
+}
+
+```
+For this challenge, all we need to do is add some JavaScript in curly braces, we have access to our note.body from our map function, our note.body is our string. We will use
+.split on the new line character\n, that will return an array, and we'll say at the index of 0, which should access the very first line of our note.
 
 
 
